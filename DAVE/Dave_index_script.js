@@ -13,10 +13,10 @@ function ccalc(){
   var inputMonto=document.getElementById("input_monto").value;
 
   var contado=inputMonto;
-  var ahora3=(inputMonto*1.05).toFixed(2);
-  var ahora6=(inputMonto*1.10).toFixed(2);
-  var ahora12=(inputMonto*1.15).toFixed(2);
-  var ahora18=(inputMonto*1.20).toFixed(2);
+  var ahora3=(inputMonto*1.05/3).toFixed(2);
+  var ahora6=(inputMonto*1.10/6).toFixed(2);
+  var ahora12=(inputMonto*1.15/12).toFixed(2);
+  var ahora18=(inputMonto*1.20/18).toFixed(2);
  
   document.getElementById("contado_li").innerHTML = contado;
   document.getElementById("ahora3_li").innerHTML = ahora3;
@@ -124,4 +124,10 @@ function copiarComision(){
   });
 }
 
+
+
+///////////////////////// CSV UPDATER /////////////////////////
+
+
+//Read CSV #1
 
