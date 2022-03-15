@@ -79,8 +79,6 @@ function calcularSobrefac(){
   // escribir en el textarea2
   var texto2=comision;
   document.getElementById("sobrefac_text2").innerHTML = texto2;
-
-
 }
 
 
@@ -102,7 +100,6 @@ function copiarComisionApagar(){
     }
   });
 }
-
 
 
 // copiar comision al portapapeles
@@ -130,4 +127,73 @@ function copiarComision(){
 
 
 //Read CSV #1
+
+var obj_csv1 = {
+  size:0,
+  dataFile1:[]
+};
+
+function readImage1(input) {
+  console.log(input)
+  if (input.files && input.files[0]) {
+    let reader = new FileReader();
+    reader.readAsBinaryString(input.files[0]);
+    reader.onload = function (e) {
+      console.log(e);
+      obj_csv1.size = e.total;
+      obj_csv1.dataFile1 = e.target.result
+      console.log(obj_csv1.dataFile1)
+      parseData1(obj_csv1.dataFile1)
+    }
+  }
+}
+
+function parseData1(data){
+  let csvData1 = [];
+  let lbreak = data.split("\n");
+  lbreak.forEach(res => {
+      csvData1.push(res.split(","));
+  });
+  console.table(csvData1);
+}
+
+
+//Read CSV #2
+
+var obj_csv2 = {
+  size:0,
+  dataFile2:[]
+};
+
+function readImage2(input) {
+  console.log(input)
+  if (input.files && input.files[0]) {
+    let reader = new FileReader();
+    reader.readAsBinaryString(input.files[0]);
+    reader.onload = function (e) {
+      console.log(e);
+      obj_csv2.size = e.total;
+      obj_csv2.dataFile2 = e.target.result
+      console.log(obj_csv2.dataFile2)
+      parseData2(obj_csv2.dataFile2)
+    }
+  }
+}
+
+function parseData2(data){
+  let csvData2 = [];
+  let lbreak = data.split("\n");
+  lbreak.forEach(res => {
+      csvData2.push(res.split(","));
+  });
+  console.table(csvData2);
+}
+
+
+// Read xls
+
+function readXLS(){
+  XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]], {header:1})
+}
+
 
