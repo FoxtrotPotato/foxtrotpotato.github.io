@@ -1,0 +1,151 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <title>Dave, your office helper</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href="..\bulma\css\bulma.min.css" rel="stylesheet" type="text/css"/>
+        <link href="Dave_index_style.css" rel="stylesheet" type="text/css"/>
+
+    </head>
+
+<body>
+    <div id="general" class="content">
+
+
+
+        <!-------------------    Seccion 1: Tarjeta de credito     ------------------->
+
+        <section class="hero is-small is-primary">
+            <div class="hero-body">
+            <p class="title">Calcular Cuotas</p>
+            <p class="subtitle">Devuelve texto formateado para enviar al cliente con las formas de pago disponibles.</p>
+            </div>
+        </section>
+
+        <section id="creditCard" class="section has-background-primary">
+
+            <form class="creditCard_form">
+                <input id="input_monto" class="input is-primary is-rounded" placeholder="Ingrese monto final en pesos:" onkeyup="ccalc()"><br>
+            </form>
+
+            <br>
+            <p class="pli" id="p1"> > Contado $<p id="contado_li" class="pli"></p></p>
+            <p class="pli" id="p2"> >> 3 cuotas de $<p  id="ahora3_li" class="pli"></p></p>
+            <p class="pli" id="p3"> >> 6 cuotas de $<p  id="ahora6_li" class="pli"></p></p>
+            <p class="pli" id="p4"> >> 12 cuotas de $<p  id="ahora12_li" class="pli"></p></p>
+            <p class="pli" id="p5"> >> 18 cuotas de $<p  id="ahora18_li" class="pli"></p></p>
+            <p id="p6"> - </p>
+            <p id="p"> </p>
+            <p id="p8"> Los precios expresados son en pesos finales y están sujetos a variaciones en cualquier momento y sin previo aviso. </p>
+            <p id="p9"> > Precio de contado a abonar en efectivo, por transferencia o depósito bancario, MercadoPago, Tarjetas de Débito y Crédito en un pago. 3 cuotas sin interés con Naranja en plan ZETA. </p>
+            <p id="p10"> >> Planes de financiación en 3, 6, 12 y 18 cuotas con tarjetas Visa, Mastercard, AMEX y Cabal emitidas por bancos. </p>
+
+            <!--Invisible TextArea-->
+            <textarea name="creditCard_text" id="creditCard_text" class="creditCard_text"></textarea>
+
+            <div class="buttons">
+                <button id="copy_creditCard_text" class="button is-primary is-light" onclick="copy_creditCard_text()" data-clipboard-target="#creditCard_text">Copiar texto</button>
+            </div>
+       
+            </section>
+    
+
+
+        
+        <!-------------------    Seccion 2: Sobrefacturacion     ------------------->
+        
+        <section class="hero is-small is-info">
+            <div class="hero-body">
+            <p class="title">Sobrefacturación</p>
+            <p class="subtitle">Devuelve monto para realizar Nota de crédito por comisión (NCC) y total a abonar por el cliente.</p>
+            </div>
+        </section>
+
+        <section id="sobrefac" class="section has-background-info has-text-light">
+
+            <form class="sobrefac_form">
+                <input id="input_precioFinal" class="input is-info is-rounded" type="text" placeholder="Ingrese precio a facturar, final en pesos:" onkeyup="calcularSobrefac()">
+                <input id="input_precioGremio" class="input is-info is-rounded" type="text" placeholder="Ingrese precio de costo, final en pesos:" onkeyup="calcularSobrefac()">
+                <br>
+            </form>
+
+            <br>
+            <br>
+
+            <p class="pli">Comisión: <p  id="output_comision" class="pli"></p></p>
+            <p class="pli">Monto a pagar: <p  id="output_apagar" class="pli"></p></p>
+
+            <!--Invisible TextArea-->
+            <textarea name="sobrefac_text2" id="sobrefac_text2" class="sobrefac_text2"></textarea>
+            <textarea name="sobrefac_text1" id="sobrefac_text1" class="sobrefac_text1"></textarea>
+
+            <br>
+
+            <div class="buttons">
+                <button id="copiarComision" class="button is-info is-light" onclick="copiarComision()">Copiar comisión</button>
+                <button id="copiarComisionApagar" class="button is-info is-light" onclick="copiarComisionApagar()" data-clipboard-target="#sobrefac_text">Copiar texto</button>
+
+                </div>              
+
+        </section>
+
+
+
+        <!-------------------    Seccion 3: Mercadolibre     ------------------->
+
+        <section class="hero is-small is-danger">
+            <div class="hero-body">
+            <p class="title">Actualizar CSV Mercadolibre</p>
+            <p class="subtitle">Devuelve un archivo actualizado en formato CSV listo para subir a Mercadolibre.</p>
+            </div>
+        </section>
+
+        <section id="csv_updater" class="section has-background-danger has-text-light">
+
+            <form class="csvform_form">
+
+                <label for="input_csvMELI">Subir archivo CSV de Mercadolibre </label>
+                <input id="input_csvMELI" class="input is-danger is-rounded" type="file">
+                <br><br>
+                <label for="input_csvADC">Subir archivo CSV de Zeus </label>               
+                <input id="input_csvADC" class="input is-danger is-rounded" type="file">
+                <br>
+            </form>
+
+            <br><br><br>
+
+            <div class="buttons">
+                <button class="button is-danger is-light">Descargar CSV</button>
+            </div>              
+
+        </section>
+        
+
+        <!--
+            Footer
+        <footer class="footer">
+            <div class="content has-text-centered">
+              <p>
+                <strong>Bulma</strong> by <a href="https://jgthms.com">Jeremy Thomas</a>. The source code is licensed
+                <a href="http://opensource.org/licenses/mit-license.php">MIT</a>. The website content
+                is licensed <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY NC SA 4.0</a>.
+              </p>
+            </div>
+          </footer>       
+-->
+
+
+    </div>
+   
+    <script type="text/javascript" src="Dave_index_script.js"></script>
+
+
+</body>
+
+
+
+
+</html>
+
+    
