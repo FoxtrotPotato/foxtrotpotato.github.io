@@ -7,6 +7,9 @@
     Contact me: fedeperrone@gmail.com or fede_perrone@hotmail.com
 */
 
+
+
+
 //calcular cuotas
 
 function ccalc(){
@@ -126,74 +129,68 @@ function copiarComision(){
 ///////////////////////// CSV UPDATER /////////////////////////
 
 
-//Read CSV #1
+// xls/csv MELI
 
-var obj_csv1 = {
-  size:0,
-  dataFile1:[]
-};
+var file1 = document.getElementById('input_meli')
+file1.addEventListener('change', importFile);
 
-function readImage1(input) {
-  console.log(input)
-  if (input.files && input.files[0]) {
-    let reader = new FileReader();
-    reader.readAsBinaryString(input.files[0]);
-    reader.onload = function (e) {
-      console.log(e);
-      obj_csv1.size = e.total;
-      obj_csv1.dataFile1 = e.target.result
-      console.log(obj_csv1.dataFile1)
-      parseData1(obj_csv1.dataFile1)
+
+// xls/csv ZEUS
+
+var file2 = document.getElementById('input_adc')
+file2.addEventListener('change', importFile);
+
+
+// Read XLS/CSV
+
+function importFile(evt) {
+  var f = evt.target.files[0];
+
+  if (f) {
+    var r = new FileReader();
+    r.onload = e => {
+      var contents = processExcel(e.target.result);
+      console.log(contents)
     }
+    r.readAsBinaryString(f);
+  } else {
+    console.log("Failed to load file");
   }
 }
 
-function parseData1(data){
-  let csvData1 = [];
-  let lbreak = data.split("\n");
-  lbreak.forEach(res => {
-      csvData1.push(res.split(","));
+function processExcel(data) {
+  var workbook = XLSX.read(data, {
+    type: 'binary'
   });
-  console.table(csvData1);
-}
 
-
-//Read CSV #2
-
-var obj_csv2 = {
-  size:0,
-  dataFile2:[]
+  var firstSheet = workbook.SheetNames[0];
+  var data = to_json(workbook);
+  return data
 };
 
-function readImage2(input) {
-  console.log(input)
-  if (input.files && input.files[0]) {
-    let reader = new FileReader();
-    reader.readAsBinaryString(input.files[0]);
-    reader.onload = function (e) {
-      console.log(e);
-      obj_csv2.size = e.total;
-      obj_csv2.dataFile2 = e.target.result
-      console.log(obj_csv2.dataFile2)
-      parseData2(obj_csv2.dataFile2)
-    }
-  }
-}
-
-function parseData2(data){
-  let csvData2 = [];
-  let lbreak = data.split("\n");
-  lbreak.forEach(res => {
-      csvData2.push(res.split(","));
+function to_json(workbook) {
+  var result = {};
+  workbook.SheetNames.forEach(function(sheetName) {
+    var roa = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName], {
+      header: 1
+    });
+    if (roa.length) result[sheetName] = roa;
   });
-  console.table(csvData2);
+  return JSON.stringify(result, 2, 2);
+};
+
+
+// Compare JSON files
+
+function compare(){
+
+  
+
 }
 
 
-// Read xls
 
-function readXLS(){
-  XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]], {header:1})
-}
+
+
 
 
