@@ -7,6 +7,8 @@
     Contact me: fedeperrone@gmail.com or fede_perrone@hotmail.com
 -->
 
+
+
 <!DOCTYPE HTML>
 <html>
     <head>
@@ -113,11 +115,11 @@
 
                 <form class="csvform_form">
 
-                    <label for="input_csvMELI">Subir archivo XLS de Mercadolibre </label>
-                    <input id="input_csvMELI" class="input is-danger is-rounded" type="file" onChange="readImage1(this)">
+                    <label for="input_meli">Subir archivo XLS/CSV de Mercadolibre </label>
+                    <input id="input_meli" class="input is-danger is-rounded" type="file"  accept=".csv,application/vnd.ms-excel,.xlt,application/vnd.ms-excel,.xla,application/vnd.ms-excel,.xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,.xltx,application/vnd.openxmlformats-officedocument.spreadsheetml.template,.xlsm,application/vnd.ms-excel.sheet.macroEnabled.12,.xltm,application/vnd.ms-excel.template.macroEnabled.12,.xlam,application/vnd.ms-excel.addin.macroEnabled.12,.xlsb,application/vnd.ms-excel.sheet.binary.macroEnabled.12">
                     <br><br>
-                    <label for="input_csvADC">Subir archivo CSV de Zeus </label>               
-                    <input id="input_csvADC" class="input is-danger is-rounded" type="file" onChange="readXLS(this)">
+                    <label for="input_adc">Subir archivo XLS/CSV de Zeus </label>               
+                    <input id="input_adc" class="input is-danger is-rounded" type="file" accept=".csv,application/vnd.ms-excel,.xlt,application/vnd.ms-excel,.xla,application/vnd.ms-excel,.xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,.xltx,application/vnd.openxmlformats-officedocument.spreadsheetml.template,.xlsm,application/vnd.ms-excel.sheet.macroEnabled.12,.xltm,application/vnd.ms-excel.template.macroEnabled.12,.xlam,application/vnd.ms-excel.addin.macroEnabled.12,.xlsb,application/vnd.ms-excel.sheet.binary.macroEnabled.12">
                     <br>
                 </form>
 
@@ -146,7 +148,7 @@
         </div>
     
         <script type="text/javascript" src="Dave_index_script.js"></script>
-        <script lang="javascript" src="dist/xlsx.full.min.js"></script>
+        <script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
 
     </body>
 
