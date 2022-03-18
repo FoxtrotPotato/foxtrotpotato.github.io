@@ -134,11 +134,34 @@ function copiarComision(){
 var file1 = document.getElementById('input_meli')
 file1.addEventListener('change', importFile);
 
+/*keys
+  "ITEM_ID",
+  "VARIATION_ID",
+  "SKU",
+  "TITLE",
+  "VARIATIONS",
+  "QUANTITY",
+  "PRICE",
+  "CURRENCY_ID",
+  "SHIPPING_METHOD",
+  "LISTING_TYPE",
+  "FEE_PER_SALE",
+  "STATUS",
+  "MANUFACTURING_TIME"
+*/
+
 
 // xls/csv ZEUS
 
 var file2 = document.getElementById('input_adc')
 file2.addEventListener('change', importFile);
+
+/*keys
+  "SKU",
+  "DESCRIPCION",
+  "PRECIO",
+  "CANTIDAD"
+*/
 
 
 // Read XLS/CSV
@@ -180,15 +203,63 @@ function to_json(workbook) {
 };
 
 
-// Compare JSON files
+////// Proccesing data
 
-function compare(){
+
+//add function: *dolar *%meli +shipping +extraUnderValue
+
+
+//function downloadCSV(){
+
+  // Compare JSON files
+  function compare(file1, file2) {
+    
+//    var file1_string=JSON.stringify(file1)
+//    var file2_string=JSON.stringify(file2)
+
 
   
+    var id_variant=JSON.stringify(file1.VARIATION_ID);
+    var sku1=JSON.stringify(file1.SKU);
+    var sku_variant=JSON.stringify(file1.VARIATIONS);
+    var premium=JSON.stringify(file1.LISTING_TYPE);
 
-}
+    var sku2=JSON.stringify(file2.SKU);
+    var price2=JSON.stringify(file2.PRECIO);
+    var stock2=JSON.stringify(file2.CANTIDAD);
+
+    let price3= (sku1==sku2) ? price2:0;
+    let stock3= (sku1==sku2) ? stock2:0;
+
+    
+    var file3= new Object();
+    file3.item_id=file1.item_id;
+    file3.item_id=file1.item_id;
+
+    file3.ITEM_ID=id;
+    file3.VARIATION_ID=id_variant;
+    file3.SKU=sku1;
+    file3.VARIATIONS=sku_variant;
+    file3.QUANTITY=stock2;
+    file3.PRICE=price2;
+    
+    console.log(file3);
+  }
+
+//}
 
 
+
+
+
+/*
+
+es necesario agregar:
+campo DOLAR (tomar predeterminado valor BNA + 1 - editable)
+campo COSTO ENVIO (poner predeterminado el costo que tenga al momento -segunda etapa- sobreescribir permanentemente el cambio)
+campo %
+
+*/
 
 
 
