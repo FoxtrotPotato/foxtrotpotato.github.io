@@ -131,7 +131,7 @@ function copiarComision(){
 
 // xls/csv MELI
 
-var file1 = document.getElementById('input_meli')
+var file1 = document.getElementById('input_meli');
 file1.addEventListener('change', importFile);
 
 /*keys
@@ -153,7 +153,7 @@ file1.addEventListener('change', importFile);
 
 // xls/csv ZEUS
 
-var file2 = document.getElementById('input_adc')
+var file2 = document.getElementById('input_adc');
 file2.addEventListener('change', importFile);
 
 /*keys
@@ -203,22 +203,44 @@ function to_json(workbook) {
 };
 
 
-////// Proccesing data
+////// Processing data
 
 
-//add function: *dolar *%meli +shipping +extraUnderValue
 
 
-//function downloadCSV(){
+function downloadCSV(){
 
-  // Compare JSON files
-  function compare(file1, file2) {
-    
+  function changeValues(SKU, PRICE, QUANTITY){
+    for (let i = 0; i < file1.length; i++){
+      for (let j = 0; j < file2.length; j++){
+        
+        if(JSON.parse(file1[i].SKU)==JSON.parse(file2[j].SKU)){
+          file1[i].SKU=file2[j].SKU;
+        }
+      }
+      console.log(file1);
+    }
+  }
+  
+
+
+  /*
+  const workbook = XLSX.utils.book_new()
+  const filename = 'updatedMELI';
+  const dataSheet = XLSX.utils.json_to_sheet(file3)
+  XLSX.utils.book_append_sheet(workbook, dataSheet, filename.replace('/', ''))
+
+  return XLSX.write(workbook, { type: 'buffer', bookType: 'xlsx' })
+*/
+}
+
+
+
 //    var file1_string=JSON.stringify(file1)
 //    var file2_string=JSON.stringify(file2)
 
 
-  
+  /*
     var id_variant=JSON.stringify(file1.VARIATION_ID);
     var sku1=JSON.stringify(file1.SKU);
     var sku_variant=JSON.stringify(file1.VARIATIONS);
@@ -230,7 +252,6 @@ function to_json(workbook) {
 
     let price3= (sku1==sku2) ? price2:0;
     let stock3= (sku1==sku2) ? stock2:0;
-
     
     var file3= new Object();
     file3.item_id=file1.item_id;
@@ -245,6 +266,7 @@ function to_json(workbook) {
     
     console.log(file3);
   }
+*/
 
 //}
 
@@ -258,6 +280,8 @@ es necesario agregar:
 campo DOLAR (tomar predeterminado valor BNA + 1 - editable)
 campo COSTO ENVIO (poner predeterminado el costo que tenga al momento -segunda etapa- sobreescribir permanentemente el cambio)
 campo %
+
+add function: *dolar *%meli +shipping +extraUnderValue
 
 */
 
