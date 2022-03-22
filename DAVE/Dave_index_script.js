@@ -128,52 +128,47 @@ function copiarComision(){
 
 ///////////////////////// CSV UPDATER /////////////////////////
 
+var inputMELI=localStorage;
+var inputZEUS=localStorage;
 
 // xls/csv MELI
-
+/* keys:   "ITEM_ID",  "VARIATION_ID",  "SKU",  "TITLE",  "VARIATIONS",  "QUANTITY",  "PRICE",  
+"CURRENCY_ID",  "SHIPPING_METHOD",  "LISTING_TYPE",  "FEE_PER_SALE",  "STATUS",  "MANUFACTURING_TIME" */
 var file1 = document.getElementById('input_meli');
-file1.addEventListener('change', importFile);
-
-/*keys
-  "ITEM_ID",
-  "VARIATION_ID",
-  "SKU",
-  "TITLE",
-  "VARIATIONS",
-  "QUANTITY",
-  "PRICE",
-  "CURRENCY_ID",
-  "SHIPPING_METHOD",
-  "LISTING_TYPE",
-  "FEE_PER_SALE",
-  "STATUS",
-  "MANUFACTURING_TIME"
-*/
+file1.addEventListener('change', importFile1);
 
 
 // xls/csv ZEUS
-
+/* keys:  "SKU",  "DESCRIPCION",  "PRECIO",  "CANTIDAD" */
 var file2 = document.getElementById('input_adc');
-file2.addEventListener('change', importFile);
-
-/*keys
-  "SKU",
-  "DESCRIPCION",
-  "PRECIO",
-  "CANTIDAD"
-*/
+file2.addEventListener('change', importFile2);
 
 
 // Read XLS/CSV
 
-function importFile(evt) {
+function importFile1(evt) {
   var f = evt.target.files[0];
 
   if (f) {
     var r = new FileReader();
     r.onload = e => {
-      var contents = processExcel(e.target.result);
-      console.log(contents)
+      inputMELI = processExcel(e.target.result);
+      console.log(inputMELI);
+    }
+    r.readAsBinaryString(f);
+  } else {
+    console.log("Failed to load file");
+  }
+}
+
+function importFile2(evt) {
+  var f = evt.target.files[0];
+
+  if (f) {
+    var r = new FileReader();
+    r.onload = e => {
+      inputZEUS = processExcel(e.target.result);
+      console.log(inputZEUS);
     }
     r.readAsBinaryString(f);
   } else {
@@ -188,7 +183,7 @@ function processExcel(data) {
 
   var firstSheet = workbook.SheetNames[0];
   var data = to_json(workbook);
-  return data
+    return data
 };
 
 function to_json(workbook) {
@@ -200,6 +195,7 @@ function to_json(workbook) {
     if (roa.length) result[sheetName] = roa;
   });
   return JSON.stringify(result, 2, 2);
+  
 };
 
 
@@ -207,21 +203,72 @@ function to_json(workbook) {
 
 
 
-
 function downloadCSV(){
 
-  function changeValues(SKU, PRICE, QUANTITY){
-    for (let i = 0; i < file1.length; i++){
-      for (let j = 0; j < file2.length; j++){
+  //var retrievedObject = localStorage.getItem('inputMELI');
+  //console.log(JSON.parse(retrievedObject));
+
+  //console.log(inputMELI);
+  //console.log(inputZEUS);
+
+    for (let i = 0; i < inputMELI.length; i++){
+      for (let j = 0; j < inputZEUS.length; j++){
         
-        if(JSON.parse(file1[i].SKU)==JSON.parse(file2[j].SKU)){
-          file1[i].SKU=file2[j].SKU;
+        var skuMELI = localStorage.getItem('inputMELI');
+        var skuZEUS = localStorage.getItem('inputZEUS');
+        console.log(skuMELI[i]);
+        console.log(skuZEUS[j]);
+
+        if(skuMELI===skuZEUS){
+          var newPrice = JSON.parse(inputZEUS[j].PRICE);
+          var newQuantity = JSON.parse(inputZEUS[j].QUANTITY);
+          inputMELI[i].PRICE=JSON.stringify(newPrice);
+          inputMELI[i].QUANTITY=JSON.stringify(newQuantity);
         }
       }
-      console.log(file1);
     }
-  }
   
+  console.log(inputMELI);
+
+}
+
+
+
+
+
+
+
+/*
+
+var newItem = {
+  title: $('#title').val(),
+  description: $('#description').val()
+}
+
+if (localStorage.getItem("newData") === null) {
+  localStorage.setItem("newData", JSON.stringify([newItem]));
+} else {
+  var oldItems = JSON.parse(localStorage.getItem('newData'));
+  oldItems.push(newItem);
+  localStorage.setItem('newData', JSON.stringify(oldItems));
+}
+
+var newArr = JSON.parse(window.localStorage.getItem('newData'));
+
+for (var i = 0, len = newArr.length; i < len; i++) {
+  var savedPerson = newArr[i];
+  console.log(savedPerson)
+  console.log(savedPerson.title)
+  console.log(savedPerson.description)
+}
+
+*/
+
+
+
+
+
+
 
 
   /*
@@ -232,7 +279,7 @@ function downloadCSV(){
 
   return XLSX.write(workbook, { type: 'buffer', bookType: 'xlsx' })
 */
-}
+
 
 
 
