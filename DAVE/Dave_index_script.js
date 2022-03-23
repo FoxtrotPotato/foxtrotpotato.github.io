@@ -7,6 +7,8 @@
     Contact me: fedeperrone@gmail.com or fede_perrone@hotmail.com
 */
 
+// clear localstorage
+localStorage.clear();
 
 
 
@@ -152,7 +154,7 @@ function importFile1(evt) {
   if (f) {
     var r = new FileReader();
     r.onload = e => {
-      inputMELI = processExcel(e.target.result);
+      localStorage.setItem("inputMELI", processExcel(e.target.result));
       console.log(inputMELI);
     }
     r.readAsBinaryString(f);
@@ -167,7 +169,7 @@ function importFile2(evt) {
   if (f) {
     var r = new FileReader();
     r.onload = e => {
-      inputZEUS = processExcel(e.target.result);
+      localStorage.setItem("inputZEUS", processExcel(e.target.result));
       console.log(inputZEUS);
     }
     r.readAsBinaryString(f);
@@ -194,7 +196,7 @@ function to_json(workbook) {
     });
     if (roa.length) result[sheetName] = roa;
   });
-  return JSON.stringify(result, 2, 2);
+  return JSON.stringify(result,2,2);
   
 };
 
@@ -211,24 +213,41 @@ function downloadCSV(){
   //console.log(inputMELI);
   //console.log(inputZEUS);
 
-    for (let i = 0; i < inputMELI.length; i++){
-      for (let j = 0; j < inputZEUS.length; j++){
-        
-        var skuMELI = localStorage.getItem('inputMELI');
-        var skuZEUS = localStorage.getItem('inputZEUS');
-        console.log(skuMELI[i]);
-        console.log(skuZEUS[j]);
 
-        if(skuMELI===skuZEUS){
-          var newPrice = JSON.parse(inputZEUS[j].PRICE);
-          var newQuantity = JSON.parse(inputZEUS[j].QUANTITY);
-          inputMELI[i].PRICE=JSON.stringify(newPrice);
-          inputMELI[i].QUANTITY=JSON.stringify(newQuantity);
-        }
+  var tempMELI = JSON.parse(localStorage.getItem('inputMELI'));
+  var tempZEUS = JSON.parse(localStorage.getItem('inputZEUS'));
+  console.log(tempMELI);
+  console.log(tempZEUS);
+
+  //var ilength = tempMELI.Publicaciones.length;
+  //var jlength = tempZEUS.ExpArt.length;
+  //console.log(ilength);
+  //console.log(jlength);
+  
+
+  for (var i = 0; i < tempMELI.Publicaciones.length; i++){
+    for (var j = 0; j < tempZEUS.ExpArt.length; j++){
+
+      var skuMELI = tempMELI.Publicaciones[i][2];
+      var skuZEUS = tempZEUS.ExpArt[j][0];
+    
+      if(skuMELI===skuZEUS){
+        console.log("i="+i+" j="+j);
+
+        var newPrice = tempZEUS.ExpArt[j][2];
+        var newQuantity = tempZEUS.ExpArt[j][3];
+       
+        tempMELI.Publicaciones[i][5] = tempZEUS.ExpArt[j][2];
+        tempMELI.Publicaciones[i][4] = tempZEUS.ExpArt[j][3];
+
+        console.log(skuMELI+", "+tempMELI.Publicaciones[i][5]+", "+tempMELI.Publicaciones[i][4]);
+        console.log(skuZEUS+", "+newPrice+", "+newQuantity);
       }
     }
+  }
   
-  console.log(inputMELI);
+ // localStorage.setItem("inputMELI",(tempMELI));
+ // console.log(inputMELI);
 
 }
 
