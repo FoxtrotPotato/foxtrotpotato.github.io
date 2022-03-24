@@ -1,3 +1,7 @@
+
+
+// navbar
+
 document.addEventListener('DOMContentLoaded', function () {
 
     // Get all "navbar-burger" elements
@@ -23,3 +27,21 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   
   });
+
+
+// greeting
+
+var myDate = new Date();
+var hs = myDate.getHours();
+
+var greet;
+
+if (hs < 12)
+    greet = 'Good Morning!';
+else if (hs <= 17)
+    greet = 'Good Afternoon';
+else if (hs <= 5)
+    greet = 'Good Evening';
+
+document.getElementById('greetingLabel').innerHTML =
+    '<b>' + greet + '</b> ';
