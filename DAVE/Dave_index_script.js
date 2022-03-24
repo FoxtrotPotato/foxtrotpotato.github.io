@@ -7,6 +7,8 @@
     Contact me: fedeperrone@gmail.com or fede_perrone@hotmail.com
 */
 
+// clear localstorage
+localStorage.clear();
 
 
 
@@ -128,52 +130,47 @@ function copiarComision(){
 
 ///////////////////////// CSV UPDATER /////////////////////////
 
+var inputMELI=localStorage;
+var inputZEUS=localStorage;
 
 // xls/csv MELI
-
+/* keys:   "ITEM_ID",  "VARIATION_ID",  "SKU",  "TITLE",  "VARIATIONS",  "QUANTITY",  "PRICE",  
+"CURRENCY_ID",  "SHIPPING_METHOD",  "LISTING_TYPE",  "FEE_PER_SALE",  "STATUS",  "MANUFACTURING_TIME" */
 var file1 = document.getElementById('input_meli');
-file1.addEventListener('change', importFile);
-
-/*keys
-  "ITEM_ID",
-  "VARIATION_ID",
-  "SKU",
-  "TITLE",
-  "VARIATIONS",
-  "QUANTITY",
-  "PRICE",
-  "CURRENCY_ID",
-  "SHIPPING_METHOD",
-  "LISTING_TYPE",
-  "FEE_PER_SALE",
-  "STATUS",
-  "MANUFACTURING_TIME"
-*/
+file1.addEventListener('change', importFile1);
 
 
 // xls/csv ZEUS
-
+/* keys:  "SKU",  "DESCRIPCION",  "PRECIO",  "CANTIDAD" */
 var file2 = document.getElementById('input_adc');
-file2.addEventListener('change', importFile);
-
-/*keys
-  "SKU",
-  "DESCRIPCION",
-  "PRECIO",
-  "CANTIDAD"
-*/
+file2.addEventListener('change', importFile2);
 
 
 // Read XLS/CSV
 
-function importFile(evt) {
+function importFile1(evt) {
   var f = evt.target.files[0];
 
   if (f) {
     var r = new FileReader();
     r.onload = e => {
-      var contents = processExcel(e.target.result);
-      console.log(contents)
+      localStorage.setItem("inputMELI", processExcel(e.target.result));
+      console.log(inputMELI);
+    }
+    r.readAsBinaryString(f);
+  } else {
+    console.log("Failed to load file");
+  }
+}
+
+function importFile2(evt) {
+  var f = evt.target.files[0];
+
+  if (f) {
+    var r = new FileReader();
+    r.onload = e => {
+      localStorage.setItem("inputZEUS", processExcel(e.target.result));
+      console.log(inputZEUS);
     }
     r.readAsBinaryString(f);
   } else {
@@ -188,7 +185,7 @@ function processExcel(data) {
 
   var firstSheet = workbook.SheetNames[0];
   var data = to_json(workbook);
-  return data
+    return data
 };
 
 function to_json(workbook) {
@@ -199,7 +196,8 @@ function to_json(workbook) {
     });
     if (roa.length) result[sheetName] = roa;
   });
-  return JSON.stringify(result, 2, 2);
+  return JSON.stringify(result,2,2);
+  
 };
 
 
@@ -207,21 +205,89 @@ function to_json(workbook) {
 
 
 
-
 function downloadCSV(){
 
-  function changeValues(SKU, PRICE, QUANTITY){
-    for (let i = 0; i < file1.length; i++){
-      for (let j = 0; j < file2.length; j++){
-        
-        if(JSON.parse(file1[i].SKU)==JSON.parse(file2[j].SKU)){
-          file1[i].SKU=file2[j].SKU;
-        }
+  //var retrievedObject = localStorage.getItem('inputMELI');
+  //console.log(JSON.parse(retrievedObject));
+
+  //console.log(inputMELI);
+  //console.log(inputZEUS);
+
+
+  var tempMELI = JSON.parse(localStorage.getItem('inputMELI'));
+  var tempZEUS = JSON.parse(localStorage.getItem('inputZEUS'));
+  console.log(tempMELI);
+  console.log(tempZEUS);
+
+  //var ilength = tempMELI.Publicaciones.length;
+  //var jlength = tempZEUS.ExpArt.length;
+  //console.log(ilength);
+  //console.log(jlength);
+  
+
+  for (var i = 0; i < tempMELI.Publicaciones.length; i++){
+    for (var j = 0; j < tempZEUS.ExpArt.length; j++){
+
+      var skuMELI = tempMELI.Publicaciones[i][2];
+      var skuZEUS = tempZEUS.ExpArt[j][0];
+    
+      if(skuMELI===skuZEUS){
+        console.log("i="+i+" j="+j);
+
+        var newPrice = tempZEUS.ExpArt[j][2];
+        var newQuantity = tempZEUS.ExpArt[j][3];
+       
+        tempMELI.Publicaciones[i][5] = tempZEUS.ExpArt[j][2];
+        tempMELI.Publicaciones[i][4] = tempZEUS.ExpArt[j][3];
+
+        console.log(skuMELI+", "+tempMELI.Publicaciones[i][5]+", "+tempMELI.Publicaciones[i][4]);
+        console.log(skuZEUS+", "+newPrice+", "+newQuantity);
       }
-      console.log(file1);
     }
   }
   
+ // localStorage.setItem("inputMELI",(tempMELI));
+ // console.log(inputMELI);
+
+}
+
+
+
+
+
+
+
+/*
+
+var newItem = {
+  title: $('#title').val(),
+  description: $('#description').val()
+}
+
+if (localStorage.getItem("newData") === null) {
+  localStorage.setItem("newData", JSON.stringify([newItem]));
+} else {
+  var oldItems = JSON.parse(localStorage.getItem('newData'));
+  oldItems.push(newItem);
+  localStorage.setItem('newData', JSON.stringify(oldItems));
+}
+
+var newArr = JSON.parse(window.localStorage.getItem('newData'));
+
+for (var i = 0, len = newArr.length; i < len; i++) {
+  var savedPerson = newArr[i];
+  console.log(savedPerson)
+  console.log(savedPerson.title)
+  console.log(savedPerson.description)
+}
+
+*/
+
+
+
+
+
+
 
 
   /*
@@ -232,7 +298,7 @@ function downloadCSV(){
 
   return XLSX.write(workbook, { type: 'buffer', bookType: 'xlsx' })
 */
-}
+
 
 
 
