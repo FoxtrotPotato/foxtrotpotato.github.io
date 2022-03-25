@@ -234,21 +234,102 @@ function downloadCSV(){
       if(skuMELI===skuZEUS){
         console.log("i="+i+" j="+j);
 
-        var newPrice = tempZEUS.ExpArt[j][2];
+        var newPrice = (tempZEUS.ExpArt[j][2]);
+
+        if(newPrice<4000){
+          
+        }
+
+        if(tempMELI.Publicaciones[i][9]==="Premium"){
+          
+        }else{
+
+        }
+
+
         var newQuantity = tempZEUS.ExpArt[j][3];
        
-        tempMELI.Publicaciones[i][5] = tempZEUS.ExpArt[j][2];
-        tempMELI.Publicaciones[i][4] = tempZEUS.ExpArt[j][3];
+        tempMELI.Publicaciones[i][6] = tempZEUS.ExpArt[j][2];
+        tempMELI.Publicaciones[i][5] = tempZEUS.ExpArt[j][3];
 
-        console.log(skuMELI+", "+tempMELI.Publicaciones[i][5]+", "+tempMELI.Publicaciones[i][4]);
+        console.log(skuMELI+", "+tempMELI.Publicaciones[i][6]+", "+tempMELI.Publicaciones[i][5]);
         console.log(skuZEUS+", "+newPrice+", "+newQuantity);
       }
     }
   }
   
  // localStorage.setItem("inputMELI",(tempMELI));
- // console.log(inputMELI);
+ console.log(tempMELI);
 
+}
+
+
+// navbar
+
+document.addEventListener('DOMContentLoaded', function () {
+
+  // Get all "navbar-burger" elements
+  var $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
+
+  // Check if there are any nav burgers
+  if ($navbarBurgers.length > 0) {
+
+    // Add a click event on each of them
+    $navbarBurgers.forEach(function ($el) {
+      $el.addEventListener('click', function () {
+
+        // Get the target from the "data-target" attribute
+        var target = $el.dataset.target;
+        var $target = document.getElementById(target);
+
+        // Toggle the class on both the "navbar-burger" and the "navbar-menu"
+        $el.classList.toggle('is-active');
+        $target.classList.toggle('is-active');
+
+      });
+    });
+  }
+});
+
+
+
+
+
+/// Tabs navigator
+
+const TABS = [...document.querySelectorAll('#tabs li')];
+const CONTENT = [...document.querySelectorAll('#csv_updater div')];
+const ACTIVE_CLASS = 'is-active';
+
+function initTabs() {
+    TABS.forEach((tab) => {
+      tab.addEventListener('click', (e) => {
+        let selected = tab.getAttribute('data-tab');
+        updateActiveTab(tab);
+        updateActiveContent(selected);
+      })
+    })
+}
+
+function updateActiveTab(selected) {
+  TABS.forEach((tab) => {
+    if (tab && tab.classList.contains(ACTIVE_CLASS)) {
+      tab.classList.remove(ACTIVE_CLASS);
+    }
+  });
+  selected.classList.add(ACTIVE_CLASS);
+}
+
+function updateActiveContent(selected) {
+  CONTENT.forEach((item) => {
+    if (item && item.classList.contains(ACTIVE_CLASS)) {
+      item.classList.remove(ACTIVE_CLASS);
+    }
+    let data = item.getAttribute('data-content');
+    if (data === selected) {
+      item.classList.add(ACTIVE_CLASS);
+    }
+  });
 }
 
 
@@ -256,32 +337,6 @@ function downloadCSV(){
 
 
 
-
-/*
-
-var newItem = {
-  title: $('#title').val(),
-  description: $('#description').val()
-}
-
-if (localStorage.getItem("newData") === null) {
-  localStorage.setItem("newData", JSON.stringify([newItem]));
-} else {
-  var oldItems = JSON.parse(localStorage.getItem('newData'));
-  oldItems.push(newItem);
-  localStorage.setItem('newData', JSON.stringify(oldItems));
-}
-
-var newArr = JSON.parse(window.localStorage.getItem('newData'));
-
-for (var i = 0, len = newArr.length; i < len; i++) {
-  var savedPerson = newArr[i];
-  console.log(savedPerson)
-  console.log(savedPerson.title)
-  console.log(savedPerson.description)
-}
-
-*/
 
 
 
@@ -301,40 +356,6 @@ for (var i = 0, len = newArr.length; i < len; i++) {
 
 
 
-
-//    var file1_string=JSON.stringify(file1)
-//    var file2_string=JSON.stringify(file2)
-
-
-  /*
-    var id_variant=JSON.stringify(file1.VARIATION_ID);
-    var sku1=JSON.stringify(file1.SKU);
-    var sku_variant=JSON.stringify(file1.VARIATIONS);
-    var premium=JSON.stringify(file1.LISTING_TYPE);
-
-    var sku2=JSON.stringify(file2.SKU);
-    var price2=JSON.stringify(file2.PRECIO);
-    var stock2=JSON.stringify(file2.CANTIDAD);
-
-    let price3= (sku1==sku2) ? price2:0;
-    let stock3= (sku1==sku2) ? stock2:0;
-    
-    var file3= new Object();
-    file3.item_id=file1.item_id;
-    file3.item_id=file1.item_id;
-
-    file3.ITEM_ID=id;
-    file3.VARIATION_ID=id_variant;
-    file3.SKU=sku1;
-    file3.VARIATIONS=sku_variant;
-    file3.QUANTITY=stock2;
-    file3.PRICE=price2;
-    
-    console.log(file3);
-  }
-*/
-
-//}
 
 
 
