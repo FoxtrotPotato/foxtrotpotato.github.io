@@ -40,7 +40,7 @@ if (hs < 12)
     greet = 'Good Morning!';
 else if (hs <= 17)
     greet = 'Good Afternoon';
-else if (hs <= 5)
+else if (hs <= 24)
     greet = 'Good Evening';
 
 document.getElementById('greetingLabel').innerHTML =
