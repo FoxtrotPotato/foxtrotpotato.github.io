@@ -132,107 +132,90 @@
     </section>
 
     <section id="csv_updater" class="section has-background-danger has-text-light">
-       
-        <!-- Updater tab -->
-        <div class="is-active" data-content="1">
-            <form class="csvform_form">
+        <div id="tab-content">
 
-                <label for="input_meli">Subir archivo XLS/CSV de Mercadolibre </label>
-                <input id="input_meli" class="input is-danger is-rounded" type="file"
-                    accept=".csv,application/vnd.ms-excel,.xlt,application/vnd.ms-excel,.xla,application/vnd.ms-excel,.xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,.xltx,application/vnd.openxmlformats-officedocument.spreadsheetml.template,.xlsm,application/vnd.ms-excel.sheet.macroEnabled.12,.xltm,application/vnd.ms-excel.template.macroEnabled.12,.xlam,application/vnd.ms-excel.addin.macroEnabled.12,.xlsb,application/vnd.ms-excel.sheet.binary.macroEnabled.12">
+            <!-- Updater tab -->
+            <div class="is-active" data-content="1">
+                <form class="csvform_form">
+                    <label for="input_meli">Subir archivo XLS/CSV de Mercadolibre </label>
+                    <input id="input_meli" class="input is-danger is-rounded" type="file"
+                        accept=".csv,application/vnd.ms-excel,.xlt,application/vnd.ms-excel,.xla,application/vnd.ms-excel,.xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,.xltx,application/vnd.openxmlformats-officedocument.spreadsheetml.template,.xlsm,application/vnd.ms-excel.sheet.macroEnabled.12,.xltm,application/vnd.ms-excel.template.macroEnabled.12,.xlam,application/vnd.ms-excel.addin.macroEnabled.12,.xlsb,application/vnd.ms-excel.sheet.binary.macroEnabled.12">
+                    <br><br>
+                    <label for="input_adc">Subir archivo XLS/CSV de Zeus </label>
+                    <input id="input_adc" class="input is-danger is-rounded" type="file"
+                        accept=".csv,application/vnd.ms-excel,.xlt,application/vnd.ms-excel,.xla,application/vnd.ms-excel,.xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,.xltx,application/vnd.openxmlformats-officedocument.spreadsheetml.template,.xlsm,application/vnd.ms-excel.sheet.macroEnabled.12,.xltm,application/vnd.ms-excel.template.macroEnabled.12,.xlam,application/vnd.ms-excel.addin.macroEnabled.12,.xlsb,application/vnd.ms-excel.sheet.binary.macroEnabled.12">
+                    <br><br><br>
+                    <button class="button is-danger is-light" onclick="downloadCSV()">Descargar CSV</button>
+                </form>
+            </div>
+
+
+            <!-- Modifiers tab -->
+            <div class="tile is-ancestor" data-content="2">
+                <form class="tile is-vertical">
+
+                    <h1 class="title is-6 is-mega-menu-title">Moneda [USD]</h1>
+                    <p>
+                        <small class="has-text-info">Tipo de cambio BNA +1</small>
+                    </p>
+                    <textarea id="modifier_TC" class="modifier_textarea">115.50</textarea>
+
+                    <br><br>
+
+                    <h1 class="title is-6 is-mega-menu-title">Precio beneficio</h1>
+                    <p>
+                        <small class="has-text-info">Productos desde:</small>
+                    </p>
+                    <textarea id="modifier_benefit" class="modifier_textarea">4000</textarea>
+                </form>
+
                 <br><br>
-                <label for="input_adc">Subir archivo XLS/CSV de Zeus </label>
-                <input id="input_adc" class="input is-danger is-rounded" type="file"
-                    accept=".csv,application/vnd.ms-excel,.xlt,application/vnd.ms-excel,.xla,application/vnd.ms-excel,.xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,.xltx,application/vnd.openxmlformats-officedocument.spreadsheetml.template,.xlsm,application/vnd.ms-excel.sheet.macroEnabled.12,.xltm,application/vnd.ms-excel.template.macroEnabled.12,.xlam,application/vnd.ms-excel.addin.macroEnabled.12,.xlsb,application/vnd.ms-excel.sheet.binary.macroEnabled.12">
-                <br>
-            </form>
 
-            <br><br><br>
+                <form class="tile is-vertical">
 
-            <div class="buttons">
-                <button class="button is-danger is-light" onclick="downloadCSV()">Descargar CSV</button>
+                    <h1 class="title is-6 is-mega-menu-title">Porcentajes</h1>
+                    <p>
+                        <small class="has-text-info">% Clásica</small>
+                    </p>
+                    <textarea id="modifier_classic" class="modifier_textarea">13</textarea>
+                    <p>
+                        <small class="has-text-info">% Premium</small>
+                    </p>
+                    <textarea id="modifier_premium" class="modifier_textarea">28</textarea>
+                    <p>
+                        <small class="has-text-info">Extra menor a $</small>
+                    </p>
+                    <textarea id="modifier_minor" class="modifier_textarea">50</textarea>
+                </form>
+
+                <br><br>
+
+                <form class="tile is-vertical">
+
+                    <h1 class="title is-6 is-mega-menu-title">MercadoEnvíos</h1>
+                    <p>
+                        <small class="has-text-info">Precio Menor a $</small>
+                    </p>
+                    <textarea id="modifier_" class="modifier_textarea">900</textarea>
+                    <p>
+                        <small class="has-text-info">Precio Mayor a $</small>
+                    </p>
+
+                    <textarea id="modifier_" class="modifier_textarea">500</textarea>
+                </form>
             </div>
+
         </div>
-
-
-        <!-- Modifiers tab -->
-        <div data-content="2">
-            <div class="container is-fluid">
-                <div class="columns">
-                    <div class="column">
-                        <h1 class="title is-6 is-mega-menu-title">Moneda [USD]</h1>
-                        <div class="navbar-content">
-                            <p>
-                                <small class="has-text-info">Tipo de cambio BNA +1</small>
-                            </p>
-                            <textarea id="modifier_TC" class="modifier_textarea">115.50</textarea>
-                        </div>
-                        <br>
-                        <h1 class="title is-6 is-mega-menu-title">Precio beneficio</h1>
-                        <div class="navbar-content">
-                            <p>
-                                <small class="has-text-info">Productos desde:</small>
-                            </p>
-                            <textarea id="modifier_benefit" class="modifier_textarea">4000</textarea>
-                        </div>
-                    </div>
-
-                    <div class="column">
-                        <h1 class="title is-6 is-mega-menu-title">Porcentajes</h1>
-                        <div class="navbar-content">
-                            <p>
-                                <small class="has-text-info">% Clásica</small>
-                            </p>
-                            <textarea id="modifier_classic" class="modifier_textarea">13</textarea>
-                        </div>
-                        <div class="navbar-content">
-                            <p>
-                                <small class="has-text-info">% Premium</small>
-                            </p>
-                            <textarea id="modifier_premium" class="modifier_textarea">28</textarea>
-                        </div>
-                        <div class="navbar-content">
-                            <p>
-                                <small class="has-text-info">Extra menor a $</small>
-                            </p>
-                            <textarea id="modifier_minor" class="modifier_textarea">50</textarea>
-                        </div>
-                    </div>
-
-                    <div class="column">
-                        <h1 class="title is-6 is-mega-menu-title">MercadoEnvíos</h1>
-                        <div class="navbar-content">
-                            <p>
-                                <small class="has-text-info">Precio Menor a $</small>
-                            </p>
-                            <textarea id="modifier_" class="modifier_textarea">900</textarea>
-                        </div>
-                        <div class="navbar-content">
-                            <p>
-                                <small class="has-text-info">Precio Mayor a $</small>
-                            </p>
-
-                            <textarea id="modifier_" class="modifier_textarea">500</textarea>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-
-
     </section>
 
     <!-- Section tabs footer -->
-    <section>
-        <div class="tabs hero-foot is-right has-background-danger is-boxed">
-            <div class="container">
-                <ul>
-                    <li class="is-active" data-tab="1"><a>Actualizar</a></li>
-                    <li data-tab="2"><a class="has-text-danger-light">Modificadores</a></li>
-                </ul>
-            </div>
-        </div>
-    </section>
+    <div id="tabs"
+        class="tabs hero-foot is-right has-background-danger is-boxed has-background-danger-dark is-fullwidth">
+        <ul>
+            <li class="is-active" data-tab="1"><a>Actualizar</a></li>
+            <li data-tab="2"><a>Modificadores</a></li>
+        </ul>
+    </div>
 
 
 

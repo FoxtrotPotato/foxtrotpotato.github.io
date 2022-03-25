@@ -14,11 +14,11 @@
     width: 5em;
 }
 
-#csv_updater div{
+#tab-content div{
     display: none;
 }
   
-#csv_updater div.is-active {
+#tab-content div.is-active {
     display:block;
 }
 
