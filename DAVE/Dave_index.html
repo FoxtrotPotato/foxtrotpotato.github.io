@@ -11,145 +11,249 @@
 
 <!DOCTYPE HTML>
 <html>
-    <head>
-        <title>Dave! Your Office Helper</title>
-        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link href="..\bulma\css\bulma.min.css" rel="stylesheet" type="text/css"/>
-        <link href="Dave_index_style.css" rel="stylesheet" type="text/css"/>
-        
-    </head>
 
-    <body>
+<head>
+    <title>Dave! Your Office Helper</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="..\bulma\css\bulma.min.css" rel="stylesheet" type="text/css" />
+    <link href="Dave_index_style.css" rel="stylesheet" type="text/css" />
+
+</head>
+
+<body>
+    <!-------------------    Seccion 1: Tarjeta de credito     ------------------->
+
+    <section class="hero is-small is-primary">
+        <div class="hero-body">
+            <p class="title">Calcular Cuotas</p>
+            <p class="subtitle">Devuelve texto formateado para enviar al cliente con las formas de pago disponibles.</p>
+        </div>
+    </section>
+
+    <section id="creditCard" class="section has-background-primary">
+
+        <form class="creditCard_form">
+            <input id="input_monto" class="input is-primary is-rounded" placeholder="Ingrese monto final en pesos:"
+                onkeyup="ccalc()"><br>
+        </form>
+
+        <br>
+        <p class="pli" id="p1"> > Contado $
+        <p id="contado_li" class="pli"></p>
+        </p>
+        <p class="pli" id="p2"> >> 3 cuotas de $
+        <p id="ahora3_li" class="pli"></p>
+        </p>
+        <p class="pli" id="p3"> >> 6 cuotas de $
+        <p id="ahora6_li" class="pli"></p>
+        </p>
+        <p class="pli" id="p4"> >> 12 cuotas de $
+        <p id="ahora12_li" class="pli"></p>
+        </p>
+        <p class="pli" id="p5"> >> 18 cuotas de $
+        <p id="ahora18_li" class="pli"></p>
+        </p>
+        <p id="p6"> - </p>
+        <p id="p"> </p>
+        <p id="p8"> Los precios expresados son en pesos finales y están sujetos a variaciones en cualquier momento y sin
+            previo aviso. </p>
+        <p id="p9"> > Precio de contado a abonar en efectivo, por transferencia o depósito bancario, MercadoPago,
+            Tarjetas de Débito y Crédito en un pago. 3 cuotas sin interés con Naranja en plan ZETA. </p>
+        <p id="p10"> >> Planes de financiación en 3, 6, 12 y 18 cuotas con tarjetas Visa, Mastercard, AMEX y Cabal
+            emitidas por bancos. </p>
+
+        <!--Invisible TextArea-->
+        <textarea name="creditCard_text" id="creditCard_text" class="creditCard_text"></textarea>
+
+        <div class="buttons">
+            <button id="copy_creditCard_text" class="button is-primary is-light" onclick="copy_creditCard_text()"
+                data-clipboard-target="#creditCard_text">Copiar texto</button>
+        </div>
+
+    </section>
 
 
 
-            <!-------------------    Seccion 1: Tarjeta de credito     ------------------->
+    <!-------------------    Seccion 2: Sobrefacturacion     ------------------->
 
-            <section class="hero is-small is-primary">
-                <div class="hero-body">
-                <p class="title">Calcular Cuotas</p>
-                <p class="subtitle">Devuelve texto formateado para enviar al cliente con las formas de pago disponibles.</p>
-                </div>
-            </section>
+    <section class="hero is-small is-info">
+        <div class="hero-body">
+            <p class="title">Sobrefacturación</p>
+            <p class="subtitle">Devuelve monto para realizar Nota de crédito por comisión (NCC) y total a abonar por el
+                cliente.</p>
+        </div>
+    </section>
 
-            <section id="creditCard" class="section has-background-primary">
+    <section id="sobrefac" class="section has-background-info has-text-light">
 
-                <form class="creditCard_form">
-                    <input id="input_monto" class="input is-primary is-rounded" placeholder="Ingrese monto final en pesos:" onkeyup="ccalc()"><br>
-                </form>
+        <form class="sobrefac_form">
+            <input id="input_precioFinal" class="input is-info is-rounded" type="text"
+                placeholder="Ingrese precio a facturar, final en pesos:" onkeyup="calcularSobrefac()">
+            <input id="input_precioGremio" class="input is-info is-rounded" type="text"
+                placeholder="Ingrese precio de costo, final en pesos:" onkeyup="calcularSobrefac()">
+            <br>
+        </form>
 
+        <br>
+        <br>
+
+        <p class="pli">Comisión:
+        <p id="output_comision" class="pli"></p>
+        </p>
+        <p class="pli">Monto a pagar:
+        <p id="output_apagar" class="pli"></p>
+        </p>
+
+        <!--Invisible TextArea-->
+        <textarea name="sobrefac_text2" id="sobrefac_text2" class="sobrefac_text2"></textarea>
+        <textarea name="sobrefac_text1" id="sobrefac_text1" class="sobrefac_text1"></textarea>
+
+        <br>
+
+        <div class="buttons">
+            <button id="copiarComision" class="button is-info is-light" onclick="copiarComision()">Copiar
+                comisión</button>
+            <button id="copiarComisionApagar" class="button is-info is-light" onclick="copiarComisionApagar()"
+                data-clipboard-target="#sobrefac_text">Copiar texto</button>
+        </div>
+
+    </section>
+
+
+
+    <!-------------------    Seccion 3: Mercadolibre     ------------------->
+
+    <section class="hero is-small is-danger">
+        <div class="hero-body">
+            <p class="title">Actualizar CSV Mercadolibre</p>
+            <p class="subtitle">Devuelve un archivo actualizado en formato CSV listo para subir a Mercadolibre.</p>
+        </div>
+    </section>
+
+    <section id="csv_updater" class="section has-background-danger has-text-light">
+       
+        <!-- Updater tab -->
+        <div class="is-active" data-content="1">
+            <form class="csvform_form">
+
+                <label for="input_meli">Subir archivo XLS/CSV de Mercadolibre </label>
+                <input id="input_meli" class="input is-danger is-rounded" type="file"
+                    accept=".csv,application/vnd.ms-excel,.xlt,application/vnd.ms-excel,.xla,application/vnd.ms-excel,.xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,.xltx,application/vnd.openxmlformats-officedocument.spreadsheetml.template,.xlsm,application/vnd.ms-excel.sheet.macroEnabled.12,.xltm,application/vnd.ms-excel.template.macroEnabled.12,.xlam,application/vnd.ms-excel.addin.macroEnabled.12,.xlsb,application/vnd.ms-excel.sheet.binary.macroEnabled.12">
+                <br><br>
+                <label for="input_adc">Subir archivo XLS/CSV de Zeus </label>
+                <input id="input_adc" class="input is-danger is-rounded" type="file"
+                    accept=".csv,application/vnd.ms-excel,.xlt,application/vnd.ms-excel,.xla,application/vnd.ms-excel,.xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,.xltx,application/vnd.openxmlformats-officedocument.spreadsheetml.template,.xlsm,application/vnd.ms-excel.sheet.macroEnabled.12,.xltm,application/vnd.ms-excel.template.macroEnabled.12,.xlam,application/vnd.ms-excel.addin.macroEnabled.12,.xlsb,application/vnd.ms-excel.sheet.binary.macroEnabled.12">
                 <br>
-                <p class="pli" id="p1"> > Contado $<p id="contado_li" class="pli"></p></p>
-                <p class="pli" id="p2"> >> 3 cuotas de $<p  id="ahora3_li" class="pli"></p></p>
-                <p class="pli" id="p3"> >> 6 cuotas de $<p  id="ahora6_li" class="pli"></p></p>
-                <p class="pli" id="p4"> >> 12 cuotas de $<p  id="ahora12_li" class="pli"></p></p>
-                <p class="pli" id="p5"> >> 18 cuotas de $<p  id="ahora18_li" class="pli"></p></p>
-                <p id="p6"> - </p>
-                <p id="p"> </p>
-                <p id="p8"> Los precios expresados son en pesos finales y están sujetos a variaciones en cualquier momento y sin previo aviso. </p>
-                <p id="p9"> > Precio de contado a abonar en efectivo, por transferencia o depósito bancario, MercadoPago, Tarjetas de Débito y Crédito en un pago. 3 cuotas sin interés con Naranja en plan ZETA. </p>
-                <p id="p10"> >> Planes de financiación en 3, 6, 12 y 18 cuotas con tarjetas Visa, Mastercard, AMEX y Cabal emitidas por bancos. </p>
+            </form>
 
-                <!--Invisible TextArea-->
-                <textarea name="creditCard_text" id="creditCard_text" class="creditCard_text"></textarea>
+            <br><br><br>
 
-                <div class="buttons">
-                    <button id="copy_creditCard_text" class="button is-primary is-light" onclick="copy_creditCard_text()" data-clipboard-target="#creditCard_text">Copiar texto</button>
+            <div class="buttons">
+                <button class="button is-danger is-light" onclick="downloadCSV()">Descargar CSV</button>
+            </div>
+        </div>
+
+
+        <!-- Modifiers tab -->
+        <div data-content="2">
+            <div class="container is-fluid">
+                <div class="columns">
+                    <div class="column">
+                        <h1 class="title is-6 is-mega-menu-title">Moneda [USD]</h1>
+                        <div class="navbar-content">
+                            <p>
+                                <small class="has-text-info">Tipo de cambio BNA +1</small>
+                            </p>
+                            <textarea id="modifier_TC" class="modifier_textarea">115.50</textarea>
+                        </div>
+                        <br>
+                        <h1 class="title is-6 is-mega-menu-title">Precio beneficio</h1>
+                        <div class="navbar-content">
+                            <p>
+                                <small class="has-text-info">Productos desde:</small>
+                            </p>
+                            <textarea id="modifier_benefit" class="modifier_textarea">4000</textarea>
+                        </div>
+                    </div>
+
+                    <div class="column">
+                        <h1 class="title is-6 is-mega-menu-title">Porcentajes</h1>
+                        <div class="navbar-content">
+                            <p>
+                                <small class="has-text-info">% Clásica</small>
+                            </p>
+                            <textarea id="modifier_classic" class="modifier_textarea">13</textarea>
+                        </div>
+                        <div class="navbar-content">
+                            <p>
+                                <small class="has-text-info">% Premium</small>
+                            </p>
+                            <textarea id="modifier_premium" class="modifier_textarea">28</textarea>
+                        </div>
+                        <div class="navbar-content">
+                            <p>
+                                <small class="has-text-info">Extra menor a $</small>
+                            </p>
+                            <textarea id="modifier_minor" class="modifier_textarea">50</textarea>
+                        </div>
+                    </div>
+
+                    <div class="column">
+                        <h1 class="title is-6 is-mega-menu-title">MercadoEnvíos</h1>
+                        <div class="navbar-content">
+                            <p>
+                                <small class="has-text-info">Precio Menor a $</small>
+                            </p>
+                            <textarea id="modifier_" class="modifier_textarea">900</textarea>
+                        </div>
+                        <div class="navbar-content">
+                            <p>
+                                <small class="has-text-info">Precio Mayor a $</small>
+                            </p>
+
+                            <textarea id="modifier_" class="modifier_textarea">500</textarea>
+                        </div>
+
+                    </div>
                 </div>
-        
-            </section>
-        
+            </div>
 
 
-            
-            <!-------------------    Seccion 2: Sobrefacturacion     ------------------->
-            
-            <section class="hero is-small is-info">
-                <div class="hero-body">
-                <p class="title">Sobrefacturación</p>
-                <p class="subtitle">Devuelve monto para realizar Nota de crédito por comisión (NCC) y total a abonar por el cliente.</p>
-                </div>
-            </section>
+    </section>
 
-            <section id="sobrefac" class="section has-background-info has-text-light">
-
-                <form class="sobrefac_form">
-                    <input id="input_precioFinal" class="input is-info is-rounded" type="text" placeholder="Ingrese precio a facturar, final en pesos:" onkeyup="calcularSobrefac()">
-                    <input id="input_precioGremio" class="input is-info is-rounded" type="text" placeholder="Ingrese precio de costo, final en pesos:" onkeyup="calcularSobrefac()">
-                    <br>
-                </form>
-
-                <br>
-                <br>
-
-                <p class="pli">Comisión: <p  id="output_comision" class="pli"></p></p>
-                <p class="pli">Monto a pagar: <p  id="output_apagar" class="pli"></p></p>
-
-                <!--Invisible TextArea-->
-                <textarea name="sobrefac_text2" id="sobrefac_text2" class="sobrefac_text2"></textarea>
-                <textarea name="sobrefac_text1" id="sobrefac_text1" class="sobrefac_text1"></textarea>
-
-                <br>
-
-                <div class="buttons">
-                    <button id="copiarComision" class="button is-info is-light" onclick="copiarComision()">Copiar comisión</button>
-                    <button id="copiarComisionApagar" class="button is-info is-light" onclick="copiarComisionApagar()" data-clipboard-target="#sobrefac_text">Copiar texto</button>
-                </div>              
-
-            </section>
+    <!-- Section tabs footer -->
+    <section>
+        <div class="tabs hero-foot is-right has-background-danger is-boxed">
+            <div class="container">
+                <ul>
+                    <li class="is-active" data-tab="1"><a>Actualizar</a></li>
+                    <li data-tab="2"><a class="has-text-danger-light">Modificadores</a></li>
+                </ul>
+            </div>
+        </div>
+    </section>
 
 
 
-            <!-------------------    Seccion 3: Mercadolibre     ------------------->
 
-            <section class="hero is-small is-danger">
-                <div class="hero-body">
-                <p class="title">Actualizar CSV Mercadolibre</p>
-                <p class="subtitle">Devuelve un archivo actualizado en formato CSV listo para subir a Mercadolibre.</p>
-                </div>
-            </section>
+    <!-------------------    Seccion 5: Footer     ------------------->
 
-            <section id="csv_updater" class="section has-background-danger has-text-light">
-
-                <form class="csvform_form">
-
-                    <label for="input_meli">Subir archivo XLS/CSV de Mercadolibre </label>
-                    <input id="input_meli" class="input is-danger is-rounded" type="file"  accept=".csv,application/vnd.ms-excel,.xlt,application/vnd.ms-excel,.xla,application/vnd.ms-excel,.xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,.xltx,application/vnd.openxmlformats-officedocument.spreadsheetml.template,.xlsm,application/vnd.ms-excel.sheet.macroEnabled.12,.xltm,application/vnd.ms-excel.template.macroEnabled.12,.xlam,application/vnd.ms-excel.addin.macroEnabled.12,.xlsb,application/vnd.ms-excel.sheet.binary.macroEnabled.12">
-                    <br><br>
-                    <label for="input_adc">Subir archivo XLS/CSV de Zeus </label>               
-                    <input id="input_adc" class="input is-danger is-rounded" type="file" accept=".csv,application/vnd.ms-excel,.xlt,application/vnd.ms-excel,.xla,application/vnd.ms-excel,.xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,.xltx,application/vnd.openxmlformats-officedocument.spreadsheetml.template,.xlsm,application/vnd.ms-excel.sheet.macroEnabled.12,.xltm,application/vnd.ms-excel.template.macroEnabled.12,.xlam,application/vnd.ms-excel.addin.macroEnabled.12,.xlsb,application/vnd.ms-excel.sheet.binary.macroEnabled.12">
-                    <br>
-                </form>
-
-                <br><br><br>
-
-                <div class="buttons">
-                    <button class="button is-danger is-light" onclick="downloadCSV()">Descargar CSV</button>
-                </div>              
-
-            </section>
-            
+    <footer class="footer">
+        <div class="content has-text-centered">
+            <p>
+                <strong>Dull Activities Virtual Executant (DAVE)</strong> by <a
+                    href="https://foxtrotpotato.github.io/">Federico Perrone</a>. Licensed under
+                <a href="http://opensource.org/licenses/mit-license.php">GNU GPLv3</a>.
+            </p>
+        </div>
+    </footer>
 
 
-            <!-------------------    Seccion 4: Footer     ------------------->
 
-            <footer class="footer">
-                <div class="content has-text-centered">
-                <p>
-                    <strong>Dull Activities Virtual Executant (DAVE)</strong> by <a href="https://foxtrotpotato.github.io/">Federico Perrone</a>. Licensed under
-                    <a href="http://opensource.org/licenses/mit-license.php">GNU GPLv3</a>.
-                </p>
-                </div>
-            </footer>       
+    <script type="text/javascript" src="Dave_index_script.js"></script>
+    <script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
 
-            
-    
-        <script type="text/javascript" src="Dave_index_script.js"></script>
-        <script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
-
-    </body>
+</body>
 
 </html>
-
-    

@@ -8,3 +8,18 @@
     display: inline;
 }
 
+.modifier_textarea{
+    resize:none;
+    height:2em;
+    width: 5em;
+}
+
+#csv_updater div{
+    display: none;
+}
+  
+#csv_updater div.is-active {
+    display:block;
+}
+
+
