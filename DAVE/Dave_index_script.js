@@ -298,7 +298,7 @@ document.addEventListener('DOMContentLoaded', function () {
 /// Tabs navigator
 
 const TABS = [...document.querySelectorAll('#tabs li')];
-const CONTENT = [...document.querySelectorAll('#tab-content div')];
+const CONTENT = [...document.querySelectorAll('#tab-content span')];
 const ACTIVE_CLASS = 'is-active';
 
 function initTabs() {

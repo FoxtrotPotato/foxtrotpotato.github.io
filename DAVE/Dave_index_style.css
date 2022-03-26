@@ -8,18 +8,16 @@
     display: inline;
 }
 
-.modifier_textarea{
-    resize:none;
-    height:2em;
-    width: 5em;
-}
-
-#tab-content div{
+#tab-content span{
     display: none;
 }
   
-#tab-content div.is-active {
+#tab-content span.is-active {
     display:block;
 }
 
-
+.mod_input{
+    max-width: 10em;
+    resize:none;
+    overflow: hidden;
+}

@@ -135,7 +135,7 @@
         <div id="tab-content">
 
             <!-- Updater tab -->
-            <div class="is-active" data-content="1">
+            <span class="is-active" data-content="1">
                 <form class="csvform_form">
                     <label for="input_meli">Subir archivo XLS/CSV de Mercadolibre </label>
                     <input id="input_meli" class="input is-danger is-rounded" type="file"
@@ -147,63 +147,85 @@
                     <br><br><br>
                     <button class="button is-danger is-light" onclick="downloadCSV()">Descargar CSV</button>
                 </form>
-            </div>
+            </span>
 
 
             <!-- Modifiers tab -->
-            <div class="tile is-ancestor" data-content="2">
-                <form class="tile is-vertical">
+            <span data-content="2">
+                <div class="columns">
+                    <div class="column">
 
-                    <h1 class="title is-6 is-mega-menu-title">Moneda [USD]</h1>
-                    <p>
-                        <small class="has-text-info">Tipo de cambio BNA +1</small>
-                    </p>
-                    <textarea id="modifier_TC" class="modifier_textarea">115.50</textarea>
+                        <div class="field ">
+                            <label class="label has-text-danger-light">Moneda [USD]</label>
+                            <div class="control">
+                                <textarea class="input mod_input">115.50</textarea>
+                            </div>
+                            <p class="help">Tipo de cambio BNA +1</p>
+                        </div>
 
-                    <br><br>
+                        <br>
 
-                    <h1 class="title is-6 is-mega-menu-title">Precio beneficio</h1>
-                    <p>
-                        <small class="has-text-info">Productos desde:</small>
-                    </p>
-                    <textarea id="modifier_benefit" class="modifier_textarea">4000</textarea>
-                </form>
+                        <div class="field ">
+                            <label class="label has-text-danger-light">Precio beneficio</label>
+                            <p class="help">Productos desde:</p>
 
-                <br><br>
+                            <div class="control">
+                                <textarea class="input mod_input">4000</textarea>
+                            </div>
+                        </div>
 
-                <form class="tile is-vertical">
+                    </div>
 
-                    <h1 class="title is-6 is-mega-menu-title">Porcentajes</h1>
-                    <p>
-                        <small class="has-text-info">% Clásica</small>
-                    </p>
-                    <textarea id="modifier_classic" class="modifier_textarea">13</textarea>
-                    <p>
-                        <small class="has-text-info">% Premium</small>
-                    </p>
-                    <textarea id="modifier_premium" class="modifier_textarea">28</textarea>
-                    <p>
-                        <small class="has-text-info">Extra menor a $</small>
-                    </p>
-                    <textarea id="modifier_minor" class="modifier_textarea">50</textarea>
-                </form>
 
-                <br><br>
+                    <div class="column">
+                        <div class="field ">
+                            <label class="label has-text-danger-light">Porcentajes</label>
+                            <br>
+                            <p class="help">% Clásica:</p>
+                            <div class="control">
+                                <textarea class="input mod_input">13</textarea>
+                            </div>
+                        </div>
 
-                <form class="tile is-vertical">
+                        <div class="field ">
+                            <p class="help">% Premium:</p>
+                            <div class="control">
+                                <textarea class="input mod_input">28</textarea>
+                            </div>
+                        </div>
 
-                    <h1 class="title is-6 is-mega-menu-title">MercadoEnvíos</h1>
-                    <p>
-                        <small class="has-text-info">Precio Menor a $</small>
-                    </p>
-                    <textarea id="modifier_" class="modifier_textarea">900</textarea>
-                    <p>
-                        <small class="has-text-info">Precio Mayor a $</small>
-                    </p>
+                        <div class="field ">
+                            <p class="help">Extra menor a $
+                            <p id=""></p>
+                            </p>
+                            <div class="control">
+                                <textarea class="input mod_input">40</textarea>
+                            </div>
+                        </div>
 
-                    <textarea id="modifier_" class="modifier_textarea">500</textarea>
-                </form>
-            </div>
+                    </div>
+
+                    <div class="column">
+                        <div class="field ">
+                            <label class="label has-text-danger-light">MercadoEnvíos</label>
+                            <br>
+                            <p class="help">Precio Menor a $</p>
+                            <div class="control">
+                                <textarea class="input mod_input">900</textarea>
+                            </div>
+                        </div>
+
+                        <div class="field ">
+                            <p class="help">Precio Mayor a $</p>
+                            <div class="control">
+                                <textarea class="input mod_input">500</textarea>
+                            </div>
+                        </div>
+             
+                    </div>
+                 
+                </div>
+            </span>
 
         </div>
     </section>
