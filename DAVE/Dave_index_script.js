@@ -132,6 +132,26 @@ function copiarComision() {
 
 var inputMELI = localStorage;
 var inputZEUS = localStorage;
+var sheetName1 = "";
+var sheetName2 = "";
+var sheetName_aux = "";
+
+
+window.setInterval(function getsetModifiers(){
+var currency_exchange = document.getElementById("input_currency_exchange").value;
+var benefit_price = document.getElementById("input_benefit_price").value;
+var markup_classic = document.getElementById("input_markup_classic").value;
+var markup_premium = document.getElementById("input_markup_premium").value;
+var markup_min = document.getElementById("input_markup_min").value;
+var shipping_nonbenefit = document.getElementById("input_shipping_nonbenefit").value;
+var shipping_benefit = document.getElementById("input_shipping_benefit").value;
+
+document.getElementById("pbenefit1").innerHTML = benefit_price;
+document.getElementById("pbenefit2").innerHTML = benefit_price;
+document.getElementById("pbenefit3").innerHTML = benefit_price;
+}, 500);
+
+
 
 // xls/csv MELI
 /* keys:   "ITEM_ID",  "VARIATION_ID",  "SKU",  "TITLE",  "VARIATIONS",  "QUANTITY",  "PRICE",  
@@ -155,9 +175,11 @@ function importFile1(evt) {
     var r = new FileReader();
     r.onload = e => {
       localStorage.setItem("inputMELI", processExcel(e.target.result));
-      console.log(inputMELI);
+      sheetName1=sheetName_aux;
+      console.log(inputMELI,sheetName1);
     }
     r.readAsBinaryString(f);
+
   } else {
     console.log("Failed to load file");
   }
@@ -170,7 +192,8 @@ function importFile2(evt) {
     var r = new FileReader();
     r.onload = e => {
       localStorage.setItem("inputZEUS", processExcel(e.target.result));
-      console.log(inputZEUS);
+      sheetName2=sheetName_aux;
+      console.log(inputZEUS,sheetName2);
     }
     r.readAsBinaryString(f);
   } else {
@@ -195,7 +218,9 @@ function to_json(workbook) {
       header: 1
     });
     if (roa.length) result[sheetName] = roa;
+    sheetName_aux=sheetName;
   });
+
   return JSON.stringify(result, 2, 2);
 
 };
@@ -264,33 +289,6 @@ function downloadCSV() {
 }
 
 
-// navbar
-
-document.addEventListener('DOMContentLoaded', function () {
-
-  // Get all "navbar-burger" elements
-  var $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
-
-  // Check if there are any nav burgers
-  if ($navbarBurgers.length > 0) {
-
-    // Add a click event on each of them
-    $navbarBurgers.forEach(function ($el) {
-      $el.addEventListener('click', function () {
-
-        // Get the target from the "data-target" attribute
-        var target = $el.dataset.target;
-        var $target = document.getElementById(target);
-
-        // Toggle the class on both the "navbar-burger" and the "navbar-menu"
-        $el.classList.toggle('is-active');
-        $target.classList.toggle('is-active');
-
-      });
-    });
-  }
-});
-
 
 
 
@@ -334,7 +332,6 @@ function updateActiveContent(selected) {
 }
 
 initTabs();
-
 
 
 

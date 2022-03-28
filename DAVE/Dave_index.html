@@ -145,7 +145,7 @@
                     <input id="input_adc" class="input is-danger is-rounded" type="file"
                         accept=".csv,application/vnd.ms-excel,.xlt,application/vnd.ms-excel,.xla,application/vnd.ms-excel,.xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,.xltx,application/vnd.openxmlformats-officedocument.spreadsheetml.template,.xlsm,application/vnd.ms-excel.sheet.macroEnabled.12,.xltm,application/vnd.ms-excel.template.macroEnabled.12,.xlam,application/vnd.ms-excel.addin.macroEnabled.12,.xlsb,application/vnd.ms-excel.sheet.binary.macroEnabled.12">
                     <br><br><br>
-                    <button class="button is-danger is-light" onclick="downloadCSV()">Descargar CSV</button>
+                    <button type="button" class="button is-danger is-light" onclick="downloadCSV()">Descargar CSV</button>
                 </form>
             </span>
 
@@ -158,7 +158,7 @@
                         <div class="field ">
                             <label class="label has-text-danger-light">Moneda [USD]</label>
                             <div class="control">
-                                <textarea class="input mod_input">115.50</textarea>
+                                <textarea id="input_currency_exchange" class="input mod_input">115.50</textarea>
                             </div>
                             <p class="help">Tipo de cambio BNA +1</p>
                         </div>
@@ -170,7 +170,7 @@
                             <p class="help">Productos desde:</p>
 
                             <div class="control">
-                                <textarea class="input mod_input">4000</textarea>
+                                <textarea id="input_benefit_price" class="input mod_input">4000</textarea>
                             </div>
                         </div>
 
@@ -183,23 +183,21 @@
                             <br>
                             <p class="help">% Clásica:</p>
                             <div class="control">
-                                <textarea class="input mod_input">13</textarea>
+                                <textarea id="input_markup_classic" class="input mod_input">13</textarea>
                             </div>
                         </div>
 
                         <div class="field ">
                             <p class="help">% Premium:</p>
                             <div class="control">
-                                <textarea class="input mod_input">28</textarea>
+                                <textarea id="input_markup_premium" class="input mod_input">28</textarea>
                             </div>
                         </div>
 
                         <div class="field ">
-                            <p class="help">Extra menor a $
-                            <p id=""></p>
-                            </p>
+                            <p class="help pbenefit">Extra menor a $<p id="pbenefit1" class="help pbenefit"></p></p>
                             <div class="control">
-                                <textarea class="input mod_input">40</textarea>
+                                <textarea id="input_markup_min" class="input mod_input">40</textarea>
                             </div>
                         </div>
 
@@ -209,16 +207,16 @@
                         <div class="field ">
                             <label class="label has-text-danger-light">MercadoEnvíos</label>
                             <br>
-                            <p class="help">Precio Menor a $</p>
+                            <p class="help pbenefit">Precio Menor a $<p id="pbenefit2" class="help pbenefit"></p></p>
                             <div class="control">
-                                <textarea class="input mod_input">900</textarea>
+                                <textarea id="input_shipping_nonbenefit" class="input mod_input">900</textarea>
                             </div>
                         </div>
 
                         <div class="field ">
-                            <p class="help">Precio Mayor a $</p>
+                            <p class="help pbenefit">Precio Mayor a $<p id="pbenefit3" class="help pbenefit"></p></p>
                             <div class="control">
-                                <textarea class="input mod_input">500</textarea>
+                                <textarea id="input_shipping_benefit" class="input mod_input">500</textarea>
                             </div>
                         </div>
              
@@ -234,11 +232,10 @@
     <div id="tabs"
         class="tabs hero-foot is-right has-background-danger is-boxed has-background-danger-dark is-fullwidth">
         <ul>
-            <li class="is-active" data-tab="1"><a>Actualizar</a></li>
-            <li data-tab="2"><a>Modificadores</a></li>
+            <li class="tab is-active" data-tab="1"><a class="atab">Actualizar</a></li>
+            <li class="tab" data-tab="2"><a class="atab">Modificadores</a></li>
         </ul>
     </div>
-
 
 
 

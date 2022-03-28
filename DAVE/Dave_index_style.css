@@ -21,3 +21,11 @@
     resize:none;
     overflow: hidden;
 }
+
+.tab > .atab{
+    color: #FFFFFF;
+}
+
+.pbenefit{
+    display: inline;
+}
