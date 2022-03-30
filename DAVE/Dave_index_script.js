@@ -129,50 +129,36 @@ function copiarComision() {
 
 ///////////////////////// CSV UPDATER /////////////////////////
 
-var urlApiBNA = "https://api-dolar-argentina.herokuapp.com/api/dolaroficial";
-var dolarBNA=116;
-
 var inputMELI = localStorage;
 var inputZEUS = localStorage;
 var sheetName1 = "";
 var sheetName2 = "";
 var sheetName_aux = "";
 
-var currency_exchange = 0;
-var benefit_price = 0;
-var markup_classic = 0;
-var markup_premium = 0;
-var markup_min = 0;
-var shipping_nonbenefit = 0;
-var shipping_benefit = 0;
-
-window.setInterval(function getsetModifiers(){
-
-/*
-$.ajax({
-  headers: {  'Access-Control-Allow-Origin': 'https://api-dolar-argentina.herokuapp.com/api/dolaroficial' },
-  type: "GET",
-  datatype:'json',
-  url: 'https://api-dolar-argentina.herokuapp.com/api/dolaroficial',
-  success: function(data){
-  alert(data);
-  dolarBNA=JSON.parse(data);
-}});
-*/
-
-document.getElementById("input_currency_exchange").innerHTML = dolarBNA;
-currency_exchange = dolarBNA;
-
-benefit_price = document.getElementById("input_benefit_price").value.StrToFloat;
-markup_classic = document.getElementById("input_markup_classic").value.StrToFloat;
-markup_premium = document.getElementById("input_markup_premium").value.StrToFloat;
-markup_min = document.getElementById("input_markup_min").value.StrToFloat;
-shipping_nonbenefit = document.getElementById("input_shipping_nonbenefit").value.StrToFloat;
-shipping_benefit = document.getElementById("input_shipping_benefit").value.StrToFloat;
+var currency_exchange = parseFloat(document.getElementById("input_currency_exchange").value);
+var benefit_price = parseFloat(document.getElementById("input_benefit_price").value);
+var markup_classic = parseFloat(document.getElementById("input_markup_classic").value);
+var markup_premium = parseFloat(document.getElementById("input_markup_premium").value);
+var markup_min = parseFloat(document.getElementById("input_markup_min").value);
+var shipping_nonbenefit = parseFloat(document.getElementById("input_shipping_nonbenefit").value);
+var shipping_benefit = parseFloat(document.getElementById("input_shipping_benefit").value);
 document.getElementById("pbenefit1").innerHTML = benefit_price;
 document.getElementById("pbenefit2").innerHTML = benefit_price;
 document.getElementById("pbenefit3").innerHTML = benefit_price;
-}, 500);
+
+window.onchange = function getsetModifiers() {
+  currency_exchange = parseFloat(document.getElementById("input_currency_exchange").value);
+  benefit_price = parseFloat(document.getElementById("input_benefit_price").value);
+  markup_classic = parseFloat(document.getElementById("input_markup_classic").value);
+  markup_premium = parseFloat(document.getElementById("input_markup_premium").value);
+  markup_min = parseFloat(document.getElementById("input_markup_min").value);
+  shipping_nonbenefit = parseFloat(document.getElementById("input_shipping_nonbenefit").value);
+  shipping_benefit = parseFloat(document.getElementById("input_shipping_benefit").value);
+  document.getElementById("pbenefit1").innerHTML = benefit_price;
+  document.getElementById("pbenefit2").innerHTML = benefit_price;
+  document.getElementById("pbenefit3").innerHTML = benefit_price;
+
+}
 
 // xls/csv MELI
 /* keys:   "ITEM_ID",  "VARIATION_ID",  "SKU",  "TITLE",  "VARIATIONS",  "QUANTITY",  "PRICE",  
@@ -195,8 +181,8 @@ function importFile1(evt) {
     var r = new FileReader();
     r.onload = e => {
       localStorage.setItem("inputMELI", processExcel(e.target.result));
-      sheetName1=sheetName_aux;
-      console.log(inputMELI,sheetName1);
+      sheetName1 = sheetName_aux;
+      console.log(inputMELI, sheetName1);
     }
     r.readAsBinaryString(f);
 
@@ -212,8 +198,8 @@ function importFile2(evt) {
     var r = new FileReader();
     r.onload = e => {
       localStorage.setItem("inputZEUS", processExcel(e.target.result));
-      sheetName2=sheetName_aux;
-      console.log(inputZEUS,sheetName2);
+      sheetName2 = sheetName_aux;
+      console.log(inputZEUS, sheetName2);
     }
     r.readAsBinaryString(f);
   } else {
@@ -238,7 +224,7 @@ function to_json(workbook) {
       header: 1
     });
     if (roa.length) result[sheetName] = roa;
-    sheetName_aux=sheetName;
+    sheetName_aux = sheetName;
   });
 
   return JSON.stringify(result, 2, 2);
@@ -260,47 +246,54 @@ function downloadCSV() {
 
       var skuMELI = tempMELI[sheetName1][i][2];
       var skuZEUS = tempZEUS[sheetName2][j][0];
+      var priceMELI = parseFloat(tempMELI[sheetName1][i][6]);
+      var priceZEUS = parseFloat(tempZEUS[sheetName2][j][2]);
+      var quantityMELI = parseFloat(tempMELI[sheetName1][i][5]);
+      var quantityZEUS = parseFloat(tempZEUS[sheetName2][j][3]);
 
       if (skuMELI === skuZEUS) {
-        console.log("i=" + i + " j=" + j);
-
-        var newPrice = (tempZEUS[sheetName2][j][2])*currency_exchange;
+        var newPrice = (priceZEUS * currency_exchange).toFixed(0);
 
         if (newPrice < benefit_price) {
-          newPrice=newPrice+markup_min+shipping_nonbenefit;
-        }else{
-          newPrice=newPrice+shipping_benefit;
+          newPrice = +newPrice + +markup_min;
+          if ((tempMELI[sheetName1][i][11]).includes("gratis") === true) {
+            newPrice = +newPrice + +shipping_nonbenefit;
+          }
+        } else if ((tempMELI[sheetName1][i][11]).includes("gratis") === true) {
+          newPrice = +newPrice + +shipping_benefit;
         }
-        
-        if (tempMELI[sheetName1][i][9] === "Premium") {
-          newPrice=newPrice*markup_premium;
+
+        if ((tempMELI[sheetName1][i][9]) === "Premium") {
+           newPrice = +newPrice + (+newPrice * (+markup_premium/100));
         } else {
-          newPrice=newPrice*markup_classic;
+           newPrice = +newPrice + (+newPrice * (+markup_classic/100));
         }
 
         var newQuantity = tempZEUS[sheetName2][j][3];
 
-        tempMELI[sheetName1][i][6] = tempZEUS[sheetName2][j][2];
-        tempMELI[sheetName1][i][5] = tempZEUS[sheetName2][j][3];
+        priceMELI = priceZEUS;
+        quantityMELI = quantityZEUS;
 
-        console.log(skuMELI + ", " + tempMELI[sheetName1][i][6] + ", " + tempMELI[sheetName1][i][5]);
+        console.log(skuMELI + ", " + priceMELI + ", " + quantityMELI);
         console.log(skuZEUS + ", " + newPrice + ", " + newQuantity);
       }
     }
   }
 
-  localStorage.setItem("inputMELI",(tempMELI));
+  localStorage.setItem("inputMELI", (tempMELI));
   console.log(inputMELI);
 
+  date=new Date();
+  XLSX.writeFile(inputMELI, ("updatedMELI_" + (date.getTime()) + ".xlsx"));
 
 
-/*
-  const workbook = XLSX.utils.book_new()
-  const filename = ("updatedMELI_"+Date.now);
-  const dataSheet = XLSX.utils.json_to_sheet(inputMELI)
-  XLSX.utils.book_append_sheet(workbook, dataSheet, filename.replace('/', ''))
-  return XLSX.write(workbook, { type: 'buffer', bookType: 'xlsx' })
-*/
+
+  //  const workbook = XLSX.utils.book_new()
+  //  const filename = ("updatedMELI_"+(date.getTime()));
+  //  const dataSheet = XLSX.utils.json_to_sheet(inputMELI)
+  //  XLSX.utils.book_append_sheet(workbook, dataSheet, filename.replace('/', ''))
+  //  return XLSX.write(workbook, { type: 'buffer', bookType: 'xlsx' })
+  
 
 
 
