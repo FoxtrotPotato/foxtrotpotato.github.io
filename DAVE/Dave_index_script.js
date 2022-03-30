@@ -129,8 +129,6 @@ function copiarComision() {
 
 ///////////////////////// CSV UPDATER /////////////////////////
 
-//import{dolaroficial} from https://api-dolar-argentina.herokuapp.com/api/dolaroficial;
-
 var urlApiBNA = "https://api-dolar-argentina.herokuapp.com/api/dolaroficial";
 var dolarBNA=116;
 
@@ -150,16 +148,17 @@ var shipping_benefit = 0;
 
 window.setInterval(function getsetModifiers(){
 
-
+/*
 $.ajax({
+  headers: {  'Access-Control-Allow-Origin': 'https://api-dolar-argentina.herokuapp.com/api/dolaroficial' },
   type: "GET",
-  datatype:JSON,
+  datatype:'json',
   url: 'https://api-dolar-argentina.herokuapp.com/api/dolaroficial',
-  data: {venta:""},
   success: function(data){
   alert(data);
+  dolarBNA=JSON.parse(data);
 }});
-
+*/
 
 document.getElementById("input_currency_exchange").innerHTML = dolarBNA;
 currency_exchange = dolarBNA;
@@ -376,7 +375,7 @@ campo COSTO ENVIO (poner predeterminado el costo que tenga al momento -segunda e
 campo %
 
 add function: *dolar *%meli +shipping +extraUnderValue
-
+https://developer.chrome.com/docs/extensions/mv2/xhr/
 */
 
 
