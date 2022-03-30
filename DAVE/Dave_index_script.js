@@ -132,7 +132,7 @@ function copiarComision() {
 //import{dolaroficial} from https://api-dolar-argentina.herokuapp.com/api/dolaroficial;
 
 var urlApiBNA = "https://api-dolar-argentina.herokuapp.com/api/dolaroficial";
-var dolarBNA=0;
+var dolarBNA=116;
 
 var inputMELI = localStorage;
 var inputZEUS = localStorage;
@@ -150,23 +150,17 @@ var shipping_benefit = 0;
 
 window.setInterval(function getsetModifiers(){
 
-var invocation = new XMLHttpRequest();
-var apiurl = 'https://api-dolar-argentina.herokuapp.com/api/dolaroficial';
 
-if(invocation) {
-  invocation.open('GET', apiurl, true);
-  invocation.onreadystatechange = dolaroficial;
-  invocation.send();
-}
+$.ajax({
+  type: "GET",
+  datatype:JSON,
+  url: 'https://api-dolar-argentina.herokuapp.com/api/dolaroficial',
+  data: {venta:""},
+  success: function(data){
+  alert(data);
+}});
 
-  
-// $.ajax({
-//   type: "GET",
-//   url: 'https://api-dolar-argentina.herokuapp.com/api/dolaroficial',
-//   data: {venta:""},
-//   success: function(data){
-//   alert(data);
-// }});
+
 document.getElementById("input_currency_exchange").innerHTML = dolarBNA;
 currency_exchange = dolarBNA;
 
@@ -262,7 +256,6 @@ function downloadCSV() {
   console.log(tempMELI);
   console.log(tempZEUS);
 
-
   for (var i = 0; i < tempMELI[sheetName1].length; i++) {
     for (var j = 0; j < tempZEUS[sheetName2].length; j++) {
 
@@ -275,15 +268,16 @@ function downloadCSV() {
         var newPrice = (tempZEUS[sheetName2][j][2])*currency_exchange;
 
         if (newPrice < benefit_price) {
-          newPrice=newPrice+markup_min;
+          newPrice=newPrice+markup_min+shipping_nonbenefit;
+        }else{
+          newPrice=newPrice+shipping_benefit;
         }
-
+        
         if (tempMELI[sheetName1][i][9] === "Premium") {
-          newPrice=newPrice
+          newPrice=newPrice*markup_premium;
         } else {
-
+          newPrice=newPrice*markup_classic;
         }
-
 
         var newQuantity = tempZEUS[sheetName2][j][3];
 
