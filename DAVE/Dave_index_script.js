@@ -227,134 +227,93 @@ function to_json(workbook) {
     sheetName_aux = sheetName;
   });
 
-  return JSON.stringify(result, 2, 2);
+  return JSON.stringify(result);
 
 };
 
 
-////// Processing data
+function sheetUpdater() {
 
-if (inputMELI !== null && inputZEUS !== null) {
-  console.log("GO")
+  ////// Processing data
 
-  function processData() {
+  if (inputMELI !== null && inputZEUS !== null) {
+    console.log("GO")
 
+    if(sheetName1==="Ayuda"||sheetName1==="Help"){sheetName1="Publicaciones"}
+
+    var icount = 0;
+    var allcount = 0;
     var tempMELI = JSON.parse(localStorage.getItem('inputMELI'));
     var tempZEUS = JSON.parse(localStorage.getItem('inputZEUS'));
     console.log(tempMELI);
     console.log(tempZEUS);
 
-    for (var i = 0; i < tempMELI[sheetName1].length; i++) {
-      for (var j = 0; j < tempZEUS[sheetName2].length; j++) {
+    for (var i = 1; i < tempMELI[sheetName1].length; i++) {
+      allcount++;
+
+      for (var j = 1; j < tempZEUS[sheetName2].length; j++) {
 
         var skuMELI = tempMELI[sheetName1][i][2];
         var skuZEUS = tempZEUS[sheetName2][j][0];
-        var priceMELI = parseFloat(tempMELI[sheetName1][i][6]);
+        var priceMELI = parseFloat(tempMELI[sheetName1][i][7]);
         var priceZEUS = parseFloat(tempZEUS[sheetName2][j][2]);
         var quantityMELI = parseFloat(tempMELI[sheetName1][i][5]);
         var quantityZEUS = parseFloat(tempZEUS[sheetName2][j][3]);
+        var shipping=JSON.stringify(tempMELI[sheetName1][i][11]);
+        var isPremium=tempMELI[sheetName1][i][9];
 
         if (skuMELI === skuZEUS) {
+
+          icount++;
+
           var newPrice = (priceZEUS * currency_exchange).toFixed(0);
 
           if (newPrice < benefit_price) {
             newPrice = +newPrice + +markup_min;
-            if ((tempMELI[sheetName1][i][11]).includes("gratis") === true) {
+            if (shipping.includes("gratis") === true) {
               newPrice = +newPrice + +shipping_nonbenefit;
             }
-          } else if ((tempMELI[sheetName1][i][11]).includes("gratis") === true) {
+          } else if (shipping.includes("gratis") === true) {
             newPrice = +newPrice + +shipping_benefit;
           }
 
-          if ((tempMELI[sheetName1][i][9]) === "Premium") {
+          if (isPremium === "Premium") {
             newPrice = +newPrice + (+newPrice * (+markup_premium / 100));
           } else {
             newPrice = +newPrice + (+newPrice * (+markup_classic / 100));
           }
 
-          var newQuantity = tempZEUS[sheetName2][j][3];
+          tempMELI[sheetName1][i][7] = newPrice;
+          tempMELI[sheetName1][i][8] = newPrice;
+          tempMELI[sheetName1][i][5] = quantityZEUS;
 
-          priceMELI = priceZEUS;
-          quantityMELI = quantityZEUS;
+          console.log("old data: "+skuMELI+", "+priceMELI+", "+quantityMELI);
+          console.log("new data: "+skuMELI+", "+tempMELI[sheetName1][i][7]+", "+tempMELI[sheetName1][i][5]);
 
-          console.log(skuMELI + ", " + priceMELI + ", " + quantityMELI);
-          console.log(skuZEUS + ", " + newPrice + ", " + newQuantity);
         }
       }
     }
 
-    localStorage.setItem("inputMELI", JSON.stringify(tempMELI));
-
-  }
+    alert("Se actualizaron " + icount + " de " + allcount + " productos");
 
 
+    ///// Download xlsx
 
-  function downloadCSV() {
     date = new Date();
     timestamp = date.getTime();
 
-    var data = localStorage.getItem('inputMELI');
-
-    var workbook = XLSX.utils.json_to_sheet(data);
-    var ws = workbook.Sheets["Sheet1"];
-
-    XLSX.utils.sheet_add_json(ws);    console.log(ws);
-
-    XLSX.writeFile(workbook, "Report.xlsx");
+    console.log(JSON.parse(localStorage.getItem(inputMELI[sheetName1])));
 
 
-
-   //
-   // if (typeof XLSX == 'undefined') XLSX = require('xlsx');
-//
-   // var worksheet = XLSX.utils.aoa_to_sheet(data);
-   // var workbook = XLSX.utils.book_new();
-   // XLSX.utils.book_append_sheet(workbook, worksheet, "Publicaciones");
-//
-   // //XLSX.writeFile(workbook, ("sheetjs"+timestamp+".xlsx"));
-//
-   // var workbook_out = XLSX.write(workbook, { bookType: 'xlsx', type: 'binary' });
-//
-   // /* generate a download */
-   // function downloadSheet(s) {
-   //   var buf = new ArrayBuffer(s.length);
-   //   var view = new Uint8Array(buf);
-   //   for (var i = 0; i != s.length; ++i) view[i] = s.charCodeAt(i) & 0xFF;
-   //   return buf;
-   // }
-//
-   // saveAs(new Blob([downloadSheet(workbook_out)], {
-   //   type: "application/octet-stream"
-   // }), ("sheetjs" + timestamp + ".xlsx"));
-//
-   //
-   
-   
-   
-    /*
-    let sheet3 = JSON.parse(localStorage.getItem('inputMELI'));
-  
     if(typeof XLSX == 'undefined') XLSX = require('xlsx');
-    var worksheet = XLSX.utils.json_to_sheet(sheet3);
     var workbook = XLSX.utils.book_new();
+    var worksheet = XLSX.utils.json_to_sheet(tempMELI[sheetName1]);
     XLSX.utils.book_append_sheet(workbook, worksheet, "Publicaciones");
-    var updated_workbook = XLSX.write(workbook, {bookType:'xlsx', type:'binary'});
-  
-    function download(s) {
-      var buf = new ArrayBuffer(s.length);
-      var view = new Uint8Array(buf);
-      for (var i=0; i!=s.length; ++i) view[i] = s.charCodeAt(i) & 0xFF;
-      return buf;
-    }
-    
-    */
 
+    console.log(workbook);
+    console.log(worksheet);
 
-    //  const workbook = XLSX.utils.book_new()
-    //  const filename = ("updatedMELI_"+(date.getTime()));
-    //  const dataSheet = XLSX.utils.json_to_sheet(inputMELI)
-    //  XLSX.utils.book_append_sheet(workbook, dataSheet, filename.replace('/', ''))
-    //  return XLSX.write(workbook, { type: 'buffer', bookType: 'xlsx' })
+    XLSX.writeFileXLSX(workbook, ("Actualizacion-MELI-"+timestamp+".xlsx"),{type:"file"});
 
 
 
