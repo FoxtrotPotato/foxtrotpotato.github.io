@@ -234,69 +234,131 @@ function to_json(workbook) {
 
 ////// Processing data
 
-function downloadCSV() {
+if (inputMELI !== null && inputZEUS !== null) {
+  console.log("GO")
 
-  var tempMELI = JSON.parse(localStorage.getItem('inputMELI'));
-  var tempZEUS = JSON.parse(localStorage.getItem('inputZEUS'));
-  console.log(tempMELI);
-  console.log(tempZEUS);
+  function processData() {
 
-  for (var i = 0; i < tempMELI[sheetName1].length; i++) {
-    for (var j = 0; j < tempZEUS[sheetName2].length; j++) {
+    var tempMELI = JSON.parse(localStorage.getItem('inputMELI'));
+    var tempZEUS = JSON.parse(localStorage.getItem('inputZEUS'));
+    console.log(tempMELI);
+    console.log(tempZEUS);
 
-      var skuMELI = tempMELI[sheetName1][i][2];
-      var skuZEUS = tempZEUS[sheetName2][j][0];
-      var priceMELI = parseFloat(tempMELI[sheetName1][i][6]);
-      var priceZEUS = parseFloat(tempZEUS[sheetName2][j][2]);
-      var quantityMELI = parseFloat(tempMELI[sheetName1][i][5]);
-      var quantityZEUS = parseFloat(tempZEUS[sheetName2][j][3]);
+    for (var i = 0; i < tempMELI[sheetName1].length; i++) {
+      for (var j = 0; j < tempZEUS[sheetName2].length; j++) {
 
-      if (skuMELI === skuZEUS) {
-        var newPrice = (priceZEUS * currency_exchange).toFixed(0);
+        var skuMELI = tempMELI[sheetName1][i][2];
+        var skuZEUS = tempZEUS[sheetName2][j][0];
+        var priceMELI = parseFloat(tempMELI[sheetName1][i][6]);
+        var priceZEUS = parseFloat(tempZEUS[sheetName2][j][2]);
+        var quantityMELI = parseFloat(tempMELI[sheetName1][i][5]);
+        var quantityZEUS = parseFloat(tempZEUS[sheetName2][j][3]);
 
-        if (newPrice < benefit_price) {
-          newPrice = +newPrice + +markup_min;
-          if ((tempMELI[sheetName1][i][11]).includes("gratis") === true) {
-            newPrice = +newPrice + +shipping_nonbenefit;
+        if (skuMELI === skuZEUS) {
+          var newPrice = (priceZEUS * currency_exchange).toFixed(0);
+
+          if (newPrice < benefit_price) {
+            newPrice = +newPrice + +markup_min;
+            if ((tempMELI[sheetName1][i][11]).includes("gratis") === true) {
+              newPrice = +newPrice + +shipping_nonbenefit;
+            }
+          } else if ((tempMELI[sheetName1][i][11]).includes("gratis") === true) {
+            newPrice = +newPrice + +shipping_benefit;
           }
-        } else if ((tempMELI[sheetName1][i][11]).includes("gratis") === true) {
-          newPrice = +newPrice + +shipping_benefit;
+
+          if ((tempMELI[sheetName1][i][9]) === "Premium") {
+            newPrice = +newPrice + (+newPrice * (+markup_premium / 100));
+          } else {
+            newPrice = +newPrice + (+newPrice * (+markup_classic / 100));
+          }
+
+          var newQuantity = tempZEUS[sheetName2][j][3];
+
+          priceMELI = priceZEUS;
+          quantityMELI = quantityZEUS;
+
+          console.log(skuMELI + ", " + priceMELI + ", " + quantityMELI);
+          console.log(skuZEUS + ", " + newPrice + ", " + newQuantity);
         }
-
-        if ((tempMELI[sheetName1][i][9]) === "Premium") {
-           newPrice = +newPrice + (+newPrice * (+markup_premium/100));
-        } else {
-           newPrice = +newPrice + (+newPrice * (+markup_classic/100));
-        }
-
-        var newQuantity = tempZEUS[sheetName2][j][3];
-
-        priceMELI = priceZEUS;
-        quantityMELI = quantityZEUS;
-
-        console.log(skuMELI + ", " + priceMELI + ", " + quantityMELI);
-        console.log(skuZEUS + ", " + newPrice + ", " + newQuantity);
       }
     }
+
+    localStorage.setItem("inputMELI", JSON.stringify(tempMELI));
+
   }
 
-  localStorage.setItem("inputMELI", (tempMELI));
-  console.log(inputMELI);
-
-  date=new Date();
-  XLSX.writeFile(inputMELI, ("updatedMELI_" + (date.getTime()) + ".xlsx"));
 
 
+  function downloadCSV() {
+    date = new Date();
+    timestamp = date.getTime();
 
-  //  const workbook = XLSX.utils.book_new()
-  //  const filename = ("updatedMELI_"+(date.getTime()));
-  //  const dataSheet = XLSX.utils.json_to_sheet(inputMELI)
-  //  XLSX.utils.book_append_sheet(workbook, dataSheet, filename.replace('/', ''))
-  //  return XLSX.write(workbook, { type: 'buffer', bookType: 'xlsx' })
+    var data = localStorage.getItem('inputMELI');
+
+    var workbook = XLSX.utils.json_to_sheet(data);
+    var ws = workbook.Sheets["Sheet1"];
+
+    XLSX.utils.sheet_add_json(ws);    console.log(ws);
+
+    XLSX.writeFile(workbook, "Report.xlsx");
+
+
+
+   //
+   // if (typeof XLSX == 'undefined') XLSX = require('xlsx');
+//
+   // var worksheet = XLSX.utils.aoa_to_sheet(data);
+   // var workbook = XLSX.utils.book_new();
+   // XLSX.utils.book_append_sheet(workbook, worksheet, "Publicaciones");
+//
+   // //XLSX.writeFile(workbook, ("sheetjs"+timestamp+".xlsx"));
+//
+   // var workbook_out = XLSX.write(workbook, { bookType: 'xlsx', type: 'binary' });
+//
+   // /* generate a download */
+   // function downloadSheet(s) {
+   //   var buf = new ArrayBuffer(s.length);
+   //   var view = new Uint8Array(buf);
+   //   for (var i = 0; i != s.length; ++i) view[i] = s.charCodeAt(i) & 0xFF;
+   //   return buf;
+   // }
+//
+   // saveAs(new Blob([downloadSheet(workbook_out)], {
+   //   type: "application/octet-stream"
+   // }), ("sheetjs" + timestamp + ".xlsx"));
+//
+   //
+   
+   
+   
+    /*
+    let sheet3 = JSON.parse(localStorage.getItem('inputMELI'));
   
+    if(typeof XLSX == 'undefined') XLSX = require('xlsx');
+    var worksheet = XLSX.utils.json_to_sheet(sheet3);
+    var workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Publicaciones");
+    var updated_workbook = XLSX.write(workbook, {bookType:'xlsx', type:'binary'});
+  
+    function download(s) {
+      var buf = new ArrayBuffer(s.length);
+      var view = new Uint8Array(buf);
+      for (var i=0; i!=s.length; ++i) view[i] = s.charCodeAt(i) & 0xFF;
+      return buf;
+    }
+    
+    */
+
+
+    //  const workbook = XLSX.utils.book_new()
+    //  const filename = ("updatedMELI_"+(date.getTime()));
+    //  const dataSheet = XLSX.utils.json_to_sheet(inputMELI)
+    //  XLSX.utils.book_append_sheet(workbook, dataSheet, filename.replace('/', ''))
+    //  return XLSX.write(workbook, { type: 'buffer', bookType: 'xlsx' })
 
 
 
+  }
 
 }
 
@@ -353,21 +415,9 @@ initTabs();
 
 
 
-
-
-
-
-
-
-
 /*
-
 es necesario agregar:
-campo DOLAR (tomar predeterminado valor BNA + 1 - editable)
-campo COSTO ENVIO (poner predeterminado el costo que tenga al momento -segunda etapa- sobreescribir permanentemente el cambio)
-campo %
 
-add function: *dolar *%meli +shipping +extraUnderValue
 https://developer.chrome.com/docs/extensions/mv2/xhr/
 */
 
