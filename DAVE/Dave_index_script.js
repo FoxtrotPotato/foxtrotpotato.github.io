@@ -237,9 +237,8 @@ function sheetUpdater() {
   ////// Processing data
 
   if (inputMELI !== null && inputZEUS !== null) {
-    console.log("GO")
 
-    if(sheetName1==="Ayuda"||sheetName1==="Help"){sheetName1="Publicaciones"}
+    if (sheetName1 === "Ayuda" || sheetName1 === "Help") { sheetName1 = "Publicaciones" }
 
     var icount = 0;
     var allcount = 0;
@@ -259,15 +258,15 @@ function sheetUpdater() {
         var priceZEUS = parseFloat(tempZEUS[sheetName2][j][2]);
         var quantityMELI = parseFloat(tempMELI[sheetName1][i][5]);
         var quantityZEUS = parseFloat(tempZEUS[sheetName2][j][3]);
-        var shipping=JSON.stringify(tempMELI[sheetName1][i][11]);
-        var isPremium=tempMELI[sheetName1][i][9];
+        var shipping = JSON.stringify(tempMELI[sheetName1][i][11]);
+        var isPremium = tempMELI[sheetName1][i][9];
 
         if (skuMELI === skuZEUS) {
 
           icount++;
 
           var newPrice = (priceZEUS * currency_exchange).toFixed(0);
-
+          console.log(newPrice);
           if (newPrice < benefit_price) {
             newPrice = +newPrice + +markup_min;
             if (shipping.includes("gratis") === true) {
@@ -276,22 +275,22 @@ function sheetUpdater() {
           } else if (shipping.includes("gratis") === true) {
             newPrice = +newPrice + +shipping_benefit;
           }
-
+          console.log(newPrice);
           if (isPremium === "Premium") {
-            newPrice = +newPrice + (+newPrice * (+markup_premium / 100));
+            newPrice = +newPrice / (1 - (+markup_premium / 100));
           } else {
-            newPrice = +newPrice + (+newPrice * (+markup_classic / 100));
+            newPrice = +newPrice / (1 - (+markup_classic / 100));
           }
-
+          console.log(newPrice);
           tempMELI[sheetName1][i][7] = newPrice;
           tempMELI[sheetName1][i][8] = newPrice;
 
-          if(document.getElementById("stock_checkbox").checked===true){
-          tempMELI[sheetName1][i][5] = quantityZEUS;
+          if (document.getElementById("stock_checkbox").checked === true) {
+            tempMELI[sheetName1][i][5] = quantityZEUS;
           }
 
-          console.log("old data: "+skuMELI+", "+priceMELI+", "+quantityMELI);
-          console.log("new data: "+skuMELI+", "+tempMELI[sheetName1][i][7]+", "+tempMELI[sheetName1][i][5]);
+          console.log("old data: " + skuMELI + ", " + priceMELI + ", " + quantityMELI);
+          console.log("new data: " + skuMELI + ", " + tempMELI[sheetName1][i][7] + ", " + tempMELI[sheetName1][i][5]);
 
         }
       }
@@ -305,18 +304,11 @@ function sheetUpdater() {
     date = new Date();
     timestamp = date.getTime();
 
-    console.log(JSON.parse(localStorage.getItem(inputMELI[sheetName1])));
-
-
-    if(typeof XLSX == 'undefined') XLSX = require('xlsx');
+    if (typeof XLSX == 'undefined') XLSX = require('xlsx');
     var workbook = XLSX.utils.book_new();
     var worksheet = XLSX.utils.json_to_sheet(tempMELI[sheetName1]);
     XLSX.utils.book_append_sheet(workbook, worksheet, "Publicaciones");
-
-    console.log(workbook);
-    console.log(worksheet);
-
-    XLSX.writeFileXLSX(workbook, ("Actualizacion-MELI-"+timestamp+".xlsx"),{type:"file"});
+    XLSX.writeFileXLSX(workbook, ("Actualizacion-MELI-" + timestamp + ".xlsx"), { type: "file" });
 
 
 
