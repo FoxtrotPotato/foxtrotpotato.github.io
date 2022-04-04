@@ -285,7 +285,10 @@ function sheetUpdater() {
 
           tempMELI[sheetName1][i][7] = newPrice;
           tempMELI[sheetName1][i][8] = newPrice;
+
+          if(document.getElementById("stock_checkbox").checked===true){
           tempMELI[sheetName1][i][5] = quantityZEUS;
+          }
 
           console.log("old data: "+skuMELI+", "+priceMELI+", "+quantityMELI);
           console.log("new data: "+skuMELI+", "+tempMELI[sheetName1][i][7]+", "+tempMELI[sheetName1][i][5]);

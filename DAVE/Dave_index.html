@@ -146,6 +146,10 @@
                         accept=".csv,application/vnd.ms-excel,.xlt,application/vnd.ms-excel,.xla,application/vnd.ms-excel,.xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,.xltx,application/vnd.openxmlformats-officedocument.spreadsheetml.template,.xlsm,application/vnd.ms-excel.sheet.macroEnabled.12,.xltm,application/vnd.ms-excel.template.macroEnabled.12,.xlam,application/vnd.ms-excel.addin.macroEnabled.12,.xlsb,application/vnd.ms-excel.sheet.binary.macroEnabled.12">
                     <br><br><br>
                     <button type="button" class="button is-danger is-light" onclick="sheetUpdater()">Descargar</button>
+                    <label id="stock_cblabel" class="checkbox is-pulled-right">
+                        <input id="stock_checkbox" type="checkbox" checked=true>
+                        Actualizar Stock
+                    </label>
                 </form>
             </span>
 
@@ -195,7 +199,9 @@
                         </div>
 
                         <div class="field ">
-                            <p class="help pbenefit">Extra menor a $<p id="pbenefit1" class="help pbenefit"></p></p>
+                            <p class="help pbenefit">Extra menor a $
+                            <p id="pbenefit1" class="help pbenefit"></p>
+                            </p>
                             <div class="control">
                                 <textarea id="input_markup_min" class="input mod_input">50</textarea>
                             </div>
@@ -207,21 +213,25 @@
                         <div class="field ">
                             <label class="label has-text-danger-light">MercadoEnvíos</label>
                             <br>
-                            <p class="help pbenefit">Precio Menor a $<p id="pbenefit2" class="help pbenefit"></p></p>
+                            <p class="help pbenefit">Precio Menor a $
+                            <p id="pbenefit2" class="help pbenefit"></p>
+                            </p>
                             <div class="control">
                                 <textarea id="input_shipping_nonbenefit" class="input mod_input">900</textarea>
                             </div>
                         </div>
 
                         <div class="field ">
-                            <p class="help pbenefit">Precio Mayor a $<p id="pbenefit3" class="help pbenefit"></p></p>
+                            <p class="help pbenefit">Precio Mayor a $
+                            <p id="pbenefit3" class="help pbenefit"></p>
+                            </p>
                             <div class="control">
                                 <textarea id="input_shipping_benefit" class="input mod_input">500</textarea>
                             </div>
                         </div>
-             
+
                     </div>
-                 
+
                 </div>
             </span>
 
