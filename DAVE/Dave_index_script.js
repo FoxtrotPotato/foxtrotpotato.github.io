@@ -246,22 +246,23 @@ function sheetUpdater() {
     var updated = [];
     var tempMELI = JSON.parse(localStorage.getItem('inputMELI'));
     var tempZEUS = JSON.parse(localStorage.getItem('inputZEUS'));
+    var specials = [];
     console.log(tempMELI);
     console.log(tempZEUS);
 
     for (var i = 1; i < tempMELI[sheetName1].length; i++) {
       allcount++;
+      var skuMELI = (JSON.stringify(tempMELI[sheetName1][i][2])).toUpperCase();
+      var priceMELI = parseFloat(tempMELI[sheetName1][i][7]);
+      var quantityMELI = parseFloat(tempMELI[sheetName1][i][5]);
+      var shipping = JSON.stringify(tempMELI[sheetName1][i][11]);
+      var isPremium = JSON.stringify(tempMELI[sheetName1][i][13]);
 
       for (var j = 1; j < tempZEUS[sheetName2].length; j++) {
 
-        var skuMELI = (JSON.stringify(tempMELI[sheetName1][i][2])).toUpperCase();
         var skuZEUS = (JSON.stringify(tempZEUS[sheetName2][j][0])).toUpperCase();
-        var priceMELI = parseFloat(tempMELI[sheetName1][i][7]);
         var priceZEUS = parseFloat(tempZEUS[sheetName2][j][2]);
-        var quantityMELI = parseFloat(tempMELI[sheetName1][i][5]);
         var quantityZEUS = parseFloat(tempZEUS[sheetName2][j][3]);
-        var shipping = JSON.stringify(tempMELI[sheetName1][i][11]);
-        var isPremium = JSON.stringify(tempMELI[sheetName1][i][13]);
 
         if (isPremium !== 0 && skuMELI === skuZEUS) {
 
@@ -295,50 +296,14 @@ function sheetUpdater() {
           console.log("old data: " + skuMELI + ", " + priceMELI + ", " + quantityMELI);
           console.log("new data: " + skuMELI + ", " + tempMELI[sheetName1][i][7] + ", " + tempMELI[sheetName1][i][5]);
 
-        }else if(isPremium === 0 && shipping === 0){ 
-
-        ///// special update for catalogue products
-
-          icount++;
-          updated.push(skuZEUS);
-
-          quantityMELI = parseFloat(tempMELI[sheetName1][i-1][5]);
-          shipping = JSON.stringify(tempMELI[sheetName1][i-1][11]);
-          isPremium = JSON.stringify(tempMELI[sheetName1][i-1][13]);
-          priceMELI = parseFloat(tempMELI[sheetName1][i-1][7]);
-
-
-
-          var newPrice = (priceZEUS * currency_exchange).toFixed(0);
-          console.log(newPrice, shipping);
-          if (newPrice < benefit_price) {
-            newPrice = +newPrice + +markup_min;
-            if (shipping.includes("gratis") === true) {
-              newPrice = +newPrice + +shipping_nonbenefit;
-            }
-          } else if (shipping.includes("gratis") === true) {
-            newPrice = +newPrice + +shipping_benefit;
+        } else {
+          ///// special update for catalogue products
+          if((tempMELI[sheetName1][i][10])=== "0")
+          if(specials.includes(i)===false){
+            specials.push(i);
+          console.log("especiales"+specials);
           }
-          console.log(newPrice);
-          if (isPremium.includes("Premium") === true) {
-            newPrice = (+newPrice / (1 - (+markup_premium / 100))).toFixed();
-          } else {
-            newPrice = (+newPrice / (1 - (+markup_classic / 100))).toFixed();
-          }
-          console.log(newPrice);
-
-          tempMELI[sheetName1][i-1][7] = (+newPrice).toFixed(0);
-          tempMELI[sheetName1][i-1][8] = (+newPrice).toFixed(0);
-
-          if (document.getElementById("stock_checkbox").checked === true) {
-            tempMELI[sheetName1][i-1][5] = quantityZEUS;
-          }
-
-
-          console.log("old data: " + skuMELI + ", " + priceMELI + ", " + quantityMELI);
-          console.log("new data: " + skuMELI + ", " + tempMELI[sheetName1][i-1][7] + ", " + tempMELI[sheetName1][i-1][5]);
-
-        }
+        }      
       }
     }
 
