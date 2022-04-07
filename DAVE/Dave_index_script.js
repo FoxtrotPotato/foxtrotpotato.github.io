@@ -242,6 +242,8 @@ function sheetUpdater() {
 
     var icount = 0;
     var allcount = 0;
+    var notUpdated = [];
+    var updated = [];
     var tempMELI = JSON.parse(localStorage.getItem('inputMELI'));
     var tempZEUS = JSON.parse(localStorage.getItem('inputZEUS'));
     console.log(tempMELI);
@@ -252,21 +254,22 @@ function sheetUpdater() {
 
       for (var j = 1; j < tempZEUS[sheetName2].length; j++) {
 
-        var skuMELI = tempMELI[sheetName1][i][2];
-        var skuZEUS = tempZEUS[sheetName2][j][0];
+        var skuMELI = (JSON.stringify(tempMELI[sheetName1][i][2])).toUpperCase();
+        var skuZEUS = (JSON.stringify(tempZEUS[sheetName2][j][0])).toUpperCase();
         var priceMELI = parseFloat(tempMELI[sheetName1][i][7]);
         var priceZEUS = parseFloat(tempZEUS[sheetName2][j][2]);
         var quantityMELI = parseFloat(tempMELI[sheetName1][i][5]);
         var quantityZEUS = parseFloat(tempZEUS[sheetName2][j][3]);
         var shipping = JSON.stringify(tempMELI[sheetName1][i][11]);
-        var isPremium = tempMELI[sheetName1][i][9];
+        var isPremium = JSON.stringify(tempMELI[sheetName1][i][13]);
 
-        if (skuMELI === skuZEUS) {
+        if (isPremium !== 0 && skuMELI === skuZEUS) {
 
           icount++;
+          updated.push(skuZEUS);
 
           var newPrice = (priceZEUS * currency_exchange).toFixed(0);
-          console.log(newPrice);
+          console.log(newPrice, shipping);
           if (newPrice < benefit_price) {
             newPrice = +newPrice + +markup_min;
             if (shipping.includes("gratis") === true) {
@@ -276,14 +279,14 @@ function sheetUpdater() {
             newPrice = +newPrice + +shipping_benefit;
           }
           console.log(newPrice);
-          if (isPremium === "Premium") {
-            newPrice = +newPrice / (1 - (+markup_premium / 100));
+          if (isPremium.includes("Premium") === true) {
+            newPrice = (+newPrice / (1 - (+markup_premium / 100))).toFixed();
           } else {
-            newPrice = +newPrice / (1 - (+markup_classic / 100));
+            newPrice = (+newPrice / (1 - (+markup_classic / 100))).toFixed();
           }
           console.log(newPrice);
-          tempMELI[sheetName1][i][7] = newPrice;
-          tempMELI[sheetName1][i][8] = newPrice;
+          tempMELI[sheetName1][i][7] = (+newPrice).toFixed(0);
+          tempMELI[sheetName1][i][8] = (+newPrice).toFixed(0);
 
           if (document.getElementById("stock_checkbox").checked === true) {
             tempMELI[sheetName1][i][5] = quantityZEUS;
@@ -292,12 +295,68 @@ function sheetUpdater() {
           console.log("old data: " + skuMELI + ", " + priceMELI + ", " + quantityMELI);
           console.log("new data: " + skuMELI + ", " + tempMELI[sheetName1][i][7] + ", " + tempMELI[sheetName1][i][5]);
 
+        }else if(isPremium === 0 && shipping === 0){ 
+
+        ///// special update for catalogue products
+
+          icount++;
+          updated.push(skuZEUS);
+
+          quantityMELI = parseFloat(tempMELI[sheetName1][i-1][5]);
+          shipping = JSON.stringify(tempMELI[sheetName1][i-1][11]);
+          isPremium = JSON.stringify(tempMELI[sheetName1][i-1][13]);
+          priceMELI = parseFloat(tempMELI[sheetName1][i-1][7]);
+
+
+
+          var newPrice = (priceZEUS * currency_exchange).toFixed(0);
+          console.log(newPrice, shipping);
+          if (newPrice < benefit_price) {
+            newPrice = +newPrice + +markup_min;
+            if (shipping.includes("gratis") === true) {
+              newPrice = +newPrice + +shipping_nonbenefit;
+            }
+          } else if (shipping.includes("gratis") === true) {
+            newPrice = +newPrice + +shipping_benefit;
+          }
+          console.log(newPrice);
+          if (isPremium.includes("Premium") === true) {
+            newPrice = (+newPrice / (1 - (+markup_premium / 100))).toFixed();
+          } else {
+            newPrice = (+newPrice / (1 - (+markup_classic / 100))).toFixed();
+          }
+          console.log(newPrice);
+
+          tempMELI[sheetName1][i-1][7] = (+newPrice).toFixed(0);
+          tempMELI[sheetName1][i-1][8] = (+newPrice).toFixed(0);
+
+          if (document.getElementById("stock_checkbox").checked === true) {
+            tempMELI[sheetName1][i-1][5] = quantityZEUS;
+          }
+
+
+          console.log("old data: " + skuMELI + ", " + priceMELI + ", " + quantityMELI);
+          console.log("new data: " + skuMELI + ", " + tempMELI[sheetName1][i-1][7] + ", " + tempMELI[sheetName1][i-1][5]);
+
         }
       }
     }
 
     alert("Se actualizaron " + icount + " de " + allcount + " productos");
 
+
+
+    /// show not updated
+    for (var i = 1; i < tempMELI[sheetName1].length; i++) {
+      for (var j = 1; j < tempZEUS[sheetName2].length; j++) {
+        var skuMELI = tempMELI[sheetName1][i][2];
+        var skuZEUS = tempZEUS[sheetName2][j][0];
+        if (updated.includes(skuZEUS) === false && notUpdated.includes(skuZEUS) === false) {
+          notUpdated.push(skuZEUS);
+        }
+      }
+    }
+    console.dir(notUpdated);
 
     ///// Download xlsx
 
