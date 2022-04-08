@@ -247,6 +247,7 @@ function sheetUpdater() {
     var tempMELI = JSON.parse(localStorage.getItem('inputMELI'));
     var tempZEUS = JSON.parse(localStorage.getItem('inputZEUS'));
     var specials = [];
+    var specials_indeed = [];
     console.log(tempMELI);
     console.log(tempZEUS);
 
@@ -258,13 +259,15 @@ function sheetUpdater() {
       var shipping = JSON.stringify(tempMELI[sheetName1][i][11]);
       var isPremium = JSON.stringify(tempMELI[sheetName1][i][13]);
 
+      var repeatedLine= JSON.stringify(tempMELI[sheetName1][i][0])===JSON.stringify(tempMELI[sheetName1][+i-1][0]);
+
       for (var j = 1; j < tempZEUS[sheetName2].length; j++) {
 
         var skuZEUS = (JSON.stringify(tempZEUS[sheetName2][j][0])).toUpperCase();
         var priceZEUS = parseFloat(tempZEUS[sheetName2][j][2]);
         var quantityZEUS = parseFloat(tempZEUS[sheetName2][j][3]);
 
-        if (isPremium !== 0 && skuMELI === skuZEUS) {
+        if (repeatedLine===false &&isPremium !== 0 && skuMELI === skuZEUS) {
 
           icount++;
           updated.push(skuZEUS);
@@ -298,17 +301,82 @@ function sheetUpdater() {
 
         } else {
           ///// special update for catalogue products
-          if((tempMELI[sheetName1][i][10])=== "0")
-          if(specials.includes(i)===false){
-            specials.push(i);
-          console.log("especiales"+specials);
+          var g = 0;
+
+          if (JSON.stringify(tempMELI[sheetName1][i][10]) === "0") {
+            if (specials.includes(i) === false) {
+              specials.push(i);
+              g = i;
+              while (JSON.stringify(tempMELI[sheetName1][g][10]) === "0") {
+                g--;
+              }
+              if (specials_indeed.includes(g) === false) {
+                specials_indeed.push(g);
+              }
+            }
           }
-        }      
+        }
+      }
+    }
+    console.log("especiales: " + specials + " a modificar: " + specials_indeed);
+
+    for (let element of specials_indeed) {
+      console.log(element);
+      allcount++;
+
+      if ((skuMELI)===true) {
+        var skuMELI = (JSON.stringify(tempMELI[sheetName1][element][2])).toUpperCase();
+      } else {
+        skuMELI = (JSON.stringify(tempMELI[sheetName1][+element + 1][2])).toUpperCase();
+      }
+
+      var priceMELI = parseFloat(tempMELI[sheetName1][element][7]);
+      var quantityMELI = parseFloat(tempMELI[sheetName1][element][5]);
+      var shipping = JSON.stringify(tempMELI[sheetName1][element][11]);
+      var isPremium = JSON.stringify(tempMELI[sheetName1][element][13]);
+
+      for (var j = 1; j < tempZEUS[sheetName2].length; j++) {
+
+        var skuZEUS = (JSON.stringify(tempZEUS[sheetName2][j][0])).toUpperCase();
+        var priceZEUS = parseFloat(tempZEUS[sheetName2][j][2]);
+        var quantityZEUS = parseFloat(tempZEUS[sheetName2][j][3]);
+
+        if (isPremium !== 0 && skuMELI === skuZEUS) {
+
+          icount++;
+          updated.push(skuZEUS);
+
+          var newPrice = (priceZEUS * currency_exchange).toFixed(0);
+          console.log(newPrice, shipping);
+          if (newPrice < benefit_price) {
+            newPrice = +newPrice + +markup_min;
+            if (shipping.includes("gratis") === true) {
+              newPrice = +newPrice + +shipping_nonbenefit;
+            }
+          } else if (shipping.includes("gratis") === true) {
+            newPrice = +newPrice + +shipping_benefit;
+          }
+          console.log(newPrice);
+          if (isPremium.includes("Premium") === true) {
+            newPrice = (+newPrice / (1 - (+markup_premium / 100))).toFixed();
+          } else {
+            newPrice = (+newPrice / (1 - (+markup_classic / 100))).toFixed();
+          }
+          console.log(newPrice);
+          tempMELI[sheetName1][element][7] = (+newPrice).toFixed(0);
+          tempMELI[sheetName1][element][8] = (+newPrice).toFixed(0);
+
+          if (document.getElementById("stock_checkbox").checked === true) {
+            tempMELI[sheetName1][element][5] = quantityZEUS;
+          }
+
+          console.log("old data: " + skuMELI + ", " + priceMELI + ", " + quantityMELI);
+          console.log("new data: " + skuMELI + ", " + tempMELI[sheetName1][element][7] + ", " + tempMELI[sheetName1][element][5]);
+        }
       }
     }
 
     alert("Se actualizaron " + icount + " de " + allcount + " productos");
-
 
 
     /// show not updated
@@ -322,6 +390,7 @@ function sheetUpdater() {
       }
     }
     console.dir(notUpdated);
+
 
     ///// Download xlsx
 
@@ -339,10 +408,6 @@ function sheetUpdater() {
   }
 
 }
-
-
-
-
 
 
 /// Tabs navigator
@@ -384,20 +449,6 @@ function updateActiveContent(selected) {
 }
 
 initTabs();
-
-
-
-
-
-
-
-
-
-/*
-es necesario agregar:
-
-https://developer.chrome.com/docs/extensions/mv2/xhr/
-*/
 
 
 

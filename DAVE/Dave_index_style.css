@@ -4,11 +4,11 @@
     width: 0px;
 }
 
-.pli {
+.pli, .pbenefit, #guide {
     display: inline;
 }
 
-#tab-content span{
+#tab-content span {
     display: none;
 }
   
@@ -16,19 +16,16 @@
     display:block;
 }
 
-.mod_input{
+.mod_input {
     max-width: 10em;
     resize:none;
     overflow: hidden;
 }
 
-.tab > .atab{
+.tab > .atab {
     color: #FFFFFF;
 }
 
-.pbenefit{
-    display: inline;
-}
 
 
 
