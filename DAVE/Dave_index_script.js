@@ -259,7 +259,7 @@ function sheetUpdater() {
       var shipping = JSON.stringify(tempMELI[sheetName1][i][11]);
       var isPremium = JSON.stringify(tempMELI[sheetName1][i][13]);
 
-      var repeatedLine= JSON.stringify(tempMELI[sheetName1][i][0])===JSON.stringify(tempMELI[sheetName1][+i-1][0]);
+      var repeatedLine = JSON.stringify(tempMELI[sheetName1][i][0]) === JSON.stringify(tempMELI[sheetName1][+i - 1][0]);
 
       for (var j = 1; j < tempZEUS[sheetName2].length; j++) {
 
@@ -267,7 +267,7 @@ function sheetUpdater() {
         var priceZEUS = parseFloat(tempZEUS[sheetName2][j][2]);
         var quantityZEUS = parseFloat(tempZEUS[sheetName2][j][3]);
 
-        if (repeatedLine===false &&isPremium !== 0 && skuMELI === skuZEUS) {
+        if (repeatedLine === false && isPremium !== 0 && skuMELI === skuZEUS) {
 
           icount++;
           updated.push(skuZEUS);
@@ -324,7 +324,7 @@ function sheetUpdater() {
       console.log(element);
       allcount++;
 
-      if ((skuMELI)===true) {
+      if ((skuMELI) === true) {
         var skuMELI = (JSON.stringify(tempMELI[sheetName1][element][2])).toUpperCase();
       } else {
         skuMELI = (JSON.stringify(tempMELI[sheetName1][+element + 1][2])).toUpperCase();
@@ -376,6 +376,7 @@ function sheetUpdater() {
       }
     }
 
+
     alert("Se actualizaron " + icount + " de " + allcount + " productos");
 
 
@@ -392,7 +393,7 @@ function sheetUpdater() {
     console.dir(notUpdated);
 
 
-    ///// Download xlsx
+    ///// Package and Download xlsx
 
     date = new Date();
     timestamp = date.getTime();
@@ -400,7 +401,33 @@ function sheetUpdater() {
     if (typeof XLSX == 'undefined') XLSX = require('xlsx');
     var workbook = XLSX.utils.book_new();
     var worksheet = XLSX.utils.json_to_sheet(tempMELI[sheetName1]);
+    var hiddenworksheet = XLSX.utils.json_to_sheet(tempMELI.hidden);
+    var helpworksheet = XLSX.utils.json_to_sheet(tempMELI.Ayuda);
+
+    // delete a specific row
+    function ec(r, c) {
+      return XLSX.utils.encode_cell({ r: r, c: c });
+    }
+    function delete_row(ws, row_index) {
+      var variable = XLSX.utils.decode_range(ws["!ref"])
+      for (var R = row_index; R < variable.e.r; ++R) {
+        for (var C = variable.s.c; C <= variable.e.c; ++C) {
+          ws[ec(R, C)] = ws[ec(R + 1, C)];
+        }
+      }
+      variable.e.r--
+      ws['!ref'] = XLSX.utils.encode_range(variable.s, variable.e);
+    }
+    delete_row(worksheet, 0);
+    delete_row(hiddenworksheet, 0);
+    delete_row(helpworksheet, 0);
+
+    XLSX.utils.book_append_sheet(workbook, helpworksheet, "Ayuda");
+    XLSX.utils.book_append_sheet(workbook, hiddenworksheet, "hidden");
     XLSX.utils.book_append_sheet(workbook, worksheet, "Publicaciones");
+
+
+
     XLSX.writeFileXLSX(workbook, ("Actualizacion-MELI-" + timestamp + ".xlsx"), { type: "file" });
 
 
