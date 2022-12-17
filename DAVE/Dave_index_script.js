@@ -228,7 +228,6 @@ function to_json(workbook) {
   });
 
   return JSON.stringify(result);
-
 };
 
 
