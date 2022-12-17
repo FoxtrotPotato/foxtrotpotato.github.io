@@ -1,0 +1,140 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <title>HSM_challenge</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href="..\bulma\css\bulma.min.css" rel="stylesheet" type="text/css"/>
+        <link href="HSM_challenge\HSM_challenge.css" rel="stylesheet" type="text/css"/>
+    </head>
+
+    <body>
+        
+        <span class="is-active" data-content="1">
+            <form class="input_form">
+                <h3 class="pli" id="p9">Subir archivo XLS/XLSX</h3>
+                <br><br>
+                <input id="input" class="input is-danger is-rounded" type="file"
+                    accept=".csv,application/vnd.ms-excel,.xlt,application/vnd.ms-excel,.xla,application/vnd.ms-excel,.xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,.xltx,application/vnd.openxmlformats-officedocument.spreadsheetml.template,.xlsm,application/vnd.ms-excel.sheet.macroEnabled.12,.xltm,application/vnd.ms-excel.template.macroEnabled.12,.xlam,application/vnd.ms-excel.addin.macroEnabled.12,.xlsb,application/vnd.ms-excel.sheet.binary.macroEnabled.12">
+            </form>
+        </span>
+        
+        <br>
+
+        <button type="button" class="button is-danger is-light" onclick="processData()">Calcular</button>
+
+        <br><br><br>
+    
+        <span class="is-active" data-content="1">
+            <p class="pli" id="p1"> Promedio de precipitaciones mensuales: 
+                <br> 
+                <p id="avgPrecipMensuales_li" class="pli"></p>
+            </p>
+            <br>
+            <p class="pli" id="p2"> Promedio de precipitaciones anual:  
+                <p id="avgPrecipAnual_li" class="pli"></p>
+            </p>
+            <br>
+            <p class="pli" id="p3"> Mes con mayor cantidad acumulada de precipitaciones:  
+                <p id="maxPMMes_li" class="pli"></p>
+            </p>
+            <p class="pli" id="p4"> Cantidad precipitada:  
+                <p id="maxPMCantidad_li" class="pli"></p>
+            </p>
+            <br>
+            <p class="pli" id="p5"> Mes con mayor cantidad de dias con precipitaciones:  
+                <p id="maxDiasPMMes_li" class="pli"></p>
+            </p>
+            <p class="pli" id="p6"> Cantidad de dias:  
+                <p id="maxDiasPMCant_li" class="pli"></p>
+            </p>
+            <br>
+            <p class="pli" id="p7"> Mes con racha de precipitaciones mas larga:  
+                <p id="rachaMes_li" class="pli"></p>
+            </p>
+            <p class="pli" id="p8"> Dia de inicio:  
+                <p id="rachaDia_li" class="pli"></p>
+            </p>
+            <p class="pli" id="p9"> Cantidad de dias seguidos:  
+                <p id="racha_li" class="pli"></p>
+            </p>
+        </span>
+    
+        <br><br><br>
+
+        <span class="is-active" data-content="1">
+            <h3> Sentencias SQL </h3>
+            <br><br>
+            <textarea class="textarea is-info" rows="20" readonly>
+                
+CREATE TABLE clientes(
+cli_cuit NUMBER(11) NOT NULL,
+cli_razonsocial VARCHAR2(50) NOT NULL,
+cli_sitioweb VARCHAR2(50),
+cli_fechacreacion DATE,
+cli_direccion VARCHAR(50),
+prov_codigo NUMBER(2),
+cli_telefono NUMBER(14),
+CONSTRAINT pk_clientes PRIMARY KEY (cli_cuit),
+CONSTRAINT fk1_clientes FOREIGN KEY (prov_codigo) 
+REFERENCES provincias (prov_codigo)
+);
+
+CREATE TABLE provincias(
+prov_codigo NUMBER(2) NOT NULL,
+prov_denom  VARCHAR(50) NOT NULL,
+CONSTRAINT pk_provincias PRIMARY KEY (prov_codigo)
+);
+            </textarea>
+            <br>
+            <textarea class="textarea is-info" rows="39" is-family-monospace readonly>
+                
+SELECT a.afi_numero,
+       a.afi_nombre,
+       p.pres_costo
+  FROM afiliados a, consumos c, prestaciones p
+ WHERE a.afi_numero = c.con_afiliado
+   AND p.pres_codigo = c.con_prestacion
+   AND ROWNUM < 101
+ ORDER BY p.pres_costo;
+
+                --
+                 
+SELECT p.pres_codigo,
+       p.pres_nombre,
+       COUNT(c.con_prestacion)
+  FROM consumos c, prestaciones p
+ WHERE p.pres_codigo = c.con_prestacion
+   AND ROWNUM < 20
+   AND c.con_fecha >= (TO_DATE('01/01/2022','dd/MM/yyyy'))
+   AND c.con_fecha <= (TO_DATE('31/03/2022','dd/MM/yyyy'))
+ GROUP BY p.pres_codigo,
+       p.pres_nombre  
+ ORDER BY p.pres_costo;
+
+                --
+
+SELECT CASE WHEN c.pres_codigo NOT IN (SELECT cob.pres_codigo 
+                                         FROM cobertura cob
+                                        WHERE cob.plan_codigo = a.plan_codigo)
+            THEN a.afi_numero 
+            ELSE NULL END;
+       a.afi_nombre,
+  FROM afiliados a, consumos c
+ WHERE a.afi_numero = c.afi_numero
+   AND c.con_fecha >= (TO_DATE('01/01/2020','dd/MM/yyyy'))
+   AND c.con_fecha <= (TO_DATE('31/12/2020','dd/MM/yyyy'))
+ ORDER BY 1;
+
+            </textarea>
+
+
+        </span>
+       
+
+
+        <script type="text/javascript" src="HSM_challenge.js"></script>
+        <script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    </body>
+</html>
