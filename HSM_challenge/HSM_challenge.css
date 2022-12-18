@@ -6,3 +6,10 @@ textarea{
     display: inline;
 }
 
+*{
+    background-color: #FFFFFF;
+}
+
+p{
+    margin-left: 1em;
+}
